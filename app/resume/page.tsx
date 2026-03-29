@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { FileText, Download, Mail, Briefcase, GitBranch } from "lucide-react";
+import Image from "next/image";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -94,11 +95,14 @@ export default function Resume() {
             <p className="ml-4 font-mono text-xs text-latentGray">Shubham_Tade_Resume.pdf</p>
           </div>
 
-          {/* IMAGE BASED VIEWER - Bulletproof for Mobile */}
-          <div className="w-full p-4 md:p-8 flex justify-center bg-black/40">
-            <img 
+          {/* OPTIMIZED IMAGE BASED VIEWER - Bulletproof for Mobile */}
+          <div className="w-full p-4 md:p-8 flex justify-center bg-black/40 relative">
+            <Image 
               src="/resume-image.png" 
               alt="Shubham_Tade_Resume" 
+              width={1000}
+              height={1414}
+              priority
               className="w-full max-w-3xl h-auto rounded-md shadow-2xl border border-white/10"
             />
           </div>

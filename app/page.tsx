@@ -11,6 +11,7 @@ import {
   BookOpen
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 // Animation variants for the Bento Box grid
 const containerVariants = {
@@ -47,11 +48,13 @@ export default function Home() {
           {/* 1. Solid background block behind the image */}
           <div className="absolute inset-0 bg-[#0a0f1a]"></div>
           
-          {/* 2. The Image */}
-          <img 
+          {/* 2. The Optimized Next.js Image Component */}
+          <Image 
             src="/hero-profile.jpeg" 
             alt="Shubham Tade" 
-            className="relative w-full h-full object-cover grayscale contrast-[1.2] opacity-80 transition-all duration-300
+            fill
+            priority
+            className="object-cover grayscale contrast-[1.2] opacity-80 transition-all duration-300
               /* --- MOBILE POSITION --- */
               object-[10%_30%]
               /* --- DESKTOP POSITION --- */
@@ -161,7 +164,7 @@ export default function Home() {
           <motion.div variants={cardVariants} className="md:col-span-4 bg-[#0a0f1a]/80 border border-latentGray/20 rounded-2xl p-8 backdrop-blur-md group hover:border-violet-400/30 transition-all shadow-lg hover:shadow-[0_0_30px_rgba(167,139,250,0.05)] relative overflow-hidden flex flex-col justify-between">
             <div>
               <BookOpen className="text-violet-400 mb-6" size={36} />
-              <h4 className="text-2xl font-bold text-white mb-4">IJRPR Paper Publication</h4>
+              <h4 className="text-2xl font-bold text-white mb-4">IoT Smart Car Build</h4>
               <p className="text-latentGray leading-relaxed text-sm md:text-base mb-4">
                 What began as a targeted prototype for the Smart India Hackathon (SIH) evolved into a fully published paper in the IJRPR. I engineered a physical <strong className="text-white font-semibold">IoT-based smart car</strong> from the ground up, designed entirely around a safety-first architecture.
               </p>
@@ -172,7 +175,7 @@ export default function Home() {
                 <li><strong className="text-violet-300">Telemetry:</strong> Integrated GPS NEO 6 & GSM modules to broadcast real-time tracking and trigger automated SOS dispatches during simulated collision events detected via ADXL335.</li>
               </ul>
             </div>
-            <Link href="https://ijrpr.com/uploads/V4ISSUE12/IJRPR20326.pdf" className="text-violet-400 font-mono text-xs uppercase tracking-widest hover:text-white transition-colors flex items-center gap-2 mt-4 md:mt-0">
+            <Link href="/projects" className="text-violet-400 font-mono text-xs uppercase tracking-widest hover:text-white transition-colors flex items-center gap-2 mt-4 md:mt-0">
                Access Documentation <ArrowRight size={14} />
             </Link>
           </motion.div>
