@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
+import Navbar from "@/components/Navbar";
 import InteractiveBackground from "@/components/InteractiveBackground";
 
 export const metadata: Metadata = {
@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="flex antialiased relative bg-[#0a0f1a] text-white min-h-screen overflow-x-hidden">
+      <body className="flex flex-col antialiased relative bg-[#0a0f1a] text-white min-h-screen overflow-x-hidden">
         
         {/* --- FIXED VIDEO BACKGROUND --- */}
         <div className="fixed inset-0 z-[-1] w-full h-full pointer-events-none overflow-hidden bg-[#0a0f1a]">
@@ -35,15 +35,11 @@ export default function RootLayout({
         {/* Interactive canvas layer */}
         <InteractiveBackground />
         
-        {/* Navigation */}
-        <Sidebar />
+        {/* Top Navigation */}
+        <Navbar />
         
-        {/* MAIN CONTENT: 
-            md:ml-64 = Only add left margin on desktop. 
-            px-4 = smaller padding on mobile.
-            pb-24 = extra padding on bottom for mobile so content doesn't hide behind our new mobile nav!
-        */}
-        <main className="flex-1 w-full md:ml-64 px-4 py-8 md:p-8 min-h-screen relative z-10 pb-24 md:pb-8">
+        {/* MAIN CONTENT */}
+        <main className="w-full max-w-[1800px] mx-auto px-4 pt-28 pb-12 md:px-8 min-h-screen relative z-10">
           {children}
         </main>
       </body>

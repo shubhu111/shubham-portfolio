@@ -29,7 +29,7 @@ const cardVariants = {
 
 export default function Home() {
   return (
-    <main className="flex flex-col justify-start min-h-[85vh] w-full relative max-w-7xl mx-auto overflow-hidden pt-10 pb-20">
+    <div className="flex flex-col justify-start min-h-[85vh] w-full relative max-w-[1800px] mx-auto overflow-hidden pt-10 pb-20">
       
       {/* THE BACKGROUND PORTRAIT */}
       <motion.div 
@@ -45,26 +45,17 @@ export default function Home() {
             maskImage: 'linear-gradient(to right, transparent 0%, black 35%)'
           }}
         >
-          {/* 1. Solid background block behind the image */}
           <div className="absolute inset-0 bg-[#0a0f1a]"></div>
           
-          {/* 2. The Optimized Next.js Image Component */}
           <Image 
             src="/hero-profile.jpeg" 
             alt="Shubham Tade" 
             fill
             priority
-            className="object-cover grayscale contrast-[1.2] opacity-80 transition-all duration-300
-              /* --- MOBILE POSITION --- */
-              object-[10%_30%]
-              /* --- DESKTOP POSITION --- */
-              md:object-[center_30%]"
+            className="object-cover grayscale contrast-[1.2] opacity-80 transition-all duration-300 object-[10%_30%] md:object-[center_30%]"
           />
           
-          {/* 3. Bottom fade */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1a] via-[#0a0f1a]/60 to-transparent"></div>
-          
-          {/* 4. Subtle Electric Blue tint */}
           <div className="absolute inset-0 bg-electricBlue/20 mix-blend-overlay"></div>
         </div>
       </motion.div>
@@ -75,7 +66,7 @@ export default function Home() {
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
-          className="flex-1 space-y-8 mt-10 md:mt-0"
+          className="w-full lg:w-[70%] space-y-8 mt-10 md:mt-0"
         >
           <div className="flex items-center gap-4 text-latentGray font-mono text-xs md:text-sm uppercase tracking-widest">
             <div className="h-2 w-2 bg-electricBlue rounded-full shadow-[0_0_8px_rgba(0,240,255,0.8)] animate-pulse"></div>
@@ -91,7 +82,7 @@ export default function Home() {
             </h3>
           </div>
           
-          <p className="text-latentGray leading-relaxed max-w-xl text-base md:text-lg border-l-2 border-electricBlue/30 pl-5 drop-shadow-md">
+          <p className="text-latentGray leading-relaxed max-w-3xl text-base md:text-lg border-l-2 border-electricBlue/30 pl-5 drop-shadow-md">
             I am driven by a deep curiosity for how data shapes our digital world. Combining my foundation in Computer Science with advanced Data Science training, I focus on exploring machine learning architectures and developing applied AI projects that bridge the gap between raw data and intelligent user experiences.
           </p>
 
@@ -101,13 +92,13 @@ export default function Home() {
             </Link>
           </div>
         </motion.div>
-        <div className="flex-1 hidden lg:block"></div>
+        
+        <div className="hidden lg:block lg:w-[30%]"></div>
       </div>
 
-      {/* --- ABOUT ME SECTION (PROFESSIONAL AGENCY STYLE) --- */}
+      {/* --- ABOUT ME SECTION --- */}
       <div className="w-full relative z-20 mt-12 pt-16 border-t border-latentGray/20 px-4 md:px-0">
         
-        {/* The "Manifesto" Statement */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -124,7 +115,6 @@ export default function Home() {
           </h3>
         </motion.div>
 
-        {/* The "Bento Box" Grid Information Display */}
         <motion.div 
           variants={containerVariants}
           initial="hidden"
@@ -133,7 +123,6 @@ export default function Home() {
           className="grid grid-cols-1 md:grid-cols-12 gap-6"
         >
           
-          {/* Card 1: Current Role */}
           <motion.div variants={cardVariants} className="md:col-span-8 bg-[#0a0f1a]/80 border border-latentGray/20 rounded-2xl p-8 backdrop-blur-md group hover:border-electricBlue/30 transition-all shadow-lg hover:shadow-[0_0_30px_rgba(0,240,255,0.05)] relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-electricBlue/5 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none"></div>
             <BrainCircuit className="text-electricBlue mb-6" size={36} />
@@ -144,7 +133,6 @@ export default function Home() {
             </p>
           </motion.div>
 
-          {/* Card 2: Education */}
           <motion.div variants={cardVariants} className="md:col-span-4 bg-[#0a0f1a]/80 border border-latentGray/20 rounded-2xl p-8 backdrop-blur-md group hover:border-emerald-400/30 transition-all shadow-lg hover:shadow-[0_0_30px_rgba(52,211,153,0.05)] relative overflow-hidden flex flex-col justify-between">
             <div>
               <GraduationCap className="text-emerald-400 mb-6" size={36} />
@@ -160,7 +148,6 @@ export default function Home() {
             </div>
           </motion.div>
 
-          {/* Card 3: SIH IoT Smart Car to Publication */}
           <motion.div variants={cardVariants} className="md:col-span-4 bg-[#0a0f1a]/80 border border-latentGray/20 rounded-2xl p-8 backdrop-blur-md group hover:border-violet-400/30 transition-all shadow-lg hover:shadow-[0_0_30px_rgba(167,139,250,0.05)] relative overflow-hidden flex flex-col justify-between">
             <div>
               <BookOpen className="text-violet-400 mb-6" size={36} />
@@ -169,7 +156,6 @@ export default function Home() {
                 What began as a targeted prototype for the Smart India Hackathon (SIH) evolved into a fully published paper in the IJRPR. I engineered a physical <strong className="text-white font-semibold">IoT-based smart car</strong> from the ground up, designed entirely around a safety-first architecture.
               </p>
               
-              {/* Detailed Breakdown */}
               <ul className="text-latentGray text-xs md:text-sm space-y-3 mb-6 border-l-2 border-violet-400/30 pl-4">
                 <li><strong className="text-violet-300">Safety POV:</strong> Programmed an Arduino UNO in C++ to process live data from ultrasonic and MQ3 (alcohol) sensors, physically overriding the L293D motor drivers to execute automated braking on the chassis.</li>
                 <li><strong className="text-violet-300">Telemetry:</strong> Integrated GPS NEO 6 & GSM modules to broadcast real-time tracking and trigger automated SOS dispatches during simulated collision events detected via ADXL335.</li>
@@ -180,7 +166,6 @@ export default function Home() {
             </Link>
           </motion.div>
 
-          {/* Card 4: Technical Summary */}
           <motion.div variants={cardVariants} className="md:col-span-8 bg-[#0a0f1a]/80 border border-latentGray/20 rounded-2xl p-8 backdrop-blur-md group hover:border-latentGray/50 transition-all shadow-lg flex flex-col md:flex-row gap-8 items-start md:items-center">
             <div className="flex-1">
               <Code2 className="text-latentGray mb-4" size={36} />
@@ -203,6 +188,6 @@ export default function Home() {
 
       </div>
 
-    </main>
+    </div>
   );
 }
