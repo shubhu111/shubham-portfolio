@@ -84,11 +84,11 @@ export default function Contact() {
           <div className="flex items-center gap-3 mb-2">
             <Radio className="text-electricBlue animate-pulse" size={28} />
             <h1 className="text-4xl font-bold tracking-widest text-white uppercase drop-shadow-lg">
-              Establish <span className="text-electricBlue">Connection</span>
+              GET IN <span className="text-electricBlue">TOUCH</span>
             </h1>
           </div>
           <p className="text-latentGray font-mono text-sm uppercase tracking-widest mt-4">
-            [Status: Awaiting input transmission...]
+            [Let's build something intelligent together]
           </p>
         </div>
       </motion.div>
@@ -109,13 +109,13 @@ export default function Contact() {
           
           <div className="flex items-center gap-3 mb-8 relative z-10">
             <MessageSquareText className="text-latentGray" size={24} />
-            <h2 className="text-2xl font-bold text-white tracking-wide">Direct Transmission</h2>
+            <h2 className="text-2xl font-bold text-white tracking-wide">Send a Message</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-8 relative z-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="flex flex-col gap-2">
-                <label className="text-electricBlue font-mono text-[10px] tracking-widest uppercase">Name (Sender_ID)</label>
+                <label className="text-electricBlue font-mono text-[10px] tracking-widest uppercase">Name</label>
                 <input 
                   type="text" 
                   name="name" 
@@ -126,7 +126,7 @@ export default function Contact() {
               </div>
               
               <div className="flex flex-col gap-2">
-                <label className="text-electricBlue font-mono text-[10px] tracking-widest uppercase">Email (Return_Address)</label>
+                <label className="text-electricBlue font-mono text-[10px] tracking-widest uppercase">Email</label>
                 <input 
                   type="email" 
                   name="email" 
@@ -138,7 +138,7 @@ export default function Contact() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-electricBlue font-mono text-[10px] tracking-widest uppercase">Message (Data_Payload)</label>
+              <label className="text-electricBlue font-mono text-[10px] tracking-widest uppercase">Message</label>
               <textarea 
                 name="message" 
                 required
@@ -159,10 +159,10 @@ export default function Contact() {
                 ${status === "error" ? "bg-red-500/20 border-red-500 text-red-400" : ""}
               `}
             >
-              {status === "idle" && <><Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /> Broadcast Signal</>}
-              {status === "submitting" && <><Radio size={18} className="animate-spin" /> Transmitting...</>}
-              {status === "success" && <><CheckCircle2 size={18} /> Signal Delivered</>}
-              {status === "error" && <><AlertCircle size={18} /> Transmission Failed</>}
+              {status === "idle" && <><Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /> Send Message</>}
+              {status === "submitting" && <><Radio size={18} className="animate-spin" /> Sending...</>}
+              {status === "success" && <><CheckCircle2 size={18} /> Message Sent</>}
+              {status === "error" && <><AlertCircle size={18} /> Failed to send</>}
             </button>
           </form>
         </motion.div>
@@ -178,8 +178,8 @@ export default function Contact() {
               <GithubIcon size={28} />
             </div>
             <div className="relative z-10">
-              <p className="font-bold text-lg text-white tracking-wide group-hover:text-electricBlue transition-colors">GitHub Protocol</p>
-              <p className="text-xs font-mono text-latentGray/80 mt-1">Review source architecture</p>
+              <p className="font-bold text-lg text-white tracking-wide group-hover:text-electricBlue transition-colors">GitHub</p>
+              <p className="text-xs font-mono text-latentGray/80 mt-1">Explore repositories</p>
             </div>
           </a>
 
@@ -189,8 +189,8 @@ export default function Contact() {
               <LinkedinIcon size={28} />
             </div>
             <div className="relative z-10">
-              <p className="font-bold text-lg text-white tracking-wide group-hover:text-electricBlue transition-colors">LinkedIn Network</p>
-              <p className="text-xs font-mono text-latentGray/80 mt-1">Professional node connection</p>
+              <p className="font-bold text-lg text-white tracking-wide group-hover:text-electricBlue transition-colors">LinkedIn</p>
+              <p className="text-xs font-mono text-latentGray/80 mt-1">Connect professionally</p>
             </div>
           </a>
 
@@ -200,7 +200,7 @@ export default function Contact() {
               <Mail size={28} />
             </div>
             <div className="relative z-10">
-              <p className="font-bold text-lg text-white tracking-wide group-hover:text-electricBlue transition-colors">Direct SMTP</p>
+              <p className="font-bold text-lg text-white tracking-wide group-hover:text-electricBlue transition-colors">Direct Contact</p>
               <p className="text-xs font-mono text-latentGray/80 mt-1">shubhamgtade123@gmail.com</p>
             </div>
           </a>

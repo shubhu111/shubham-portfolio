@@ -175,11 +175,11 @@ export default function Projects() {
           <div className="flex items-center gap-3 mb-2">
             <FolderGit2 className="text-electricBlue animate-pulse" size={28} />
             <h1 className="text-4xl font-bold tracking-widest text-white uppercase drop-shadow-lg">
-              Living <span className="text-electricBlue">Lab</span>
+              FEATURED <span className="text-electricBlue">WORK</span>
             </h1>
           </div>
           <p className="text-latentGray font-mono text-sm uppercase tracking-widest mt-4">
-            [System Output: Applied AI Models & Architectures]
+            [Applied AI Models & Architectures]
           </p>
         </div>
       </motion.div>

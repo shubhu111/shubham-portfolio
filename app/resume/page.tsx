@@ -28,11 +28,11 @@ export default function Resume() {
           <div className="flex items-center gap-3 mb-2">
             <FileText className="text-electricBlue animate-pulse" size={28} />
             <h1 className="text-4xl font-bold tracking-widest text-white uppercase drop-shadow-lg">
-              Model <span className="text-electricBlue">Weights</span>
+              RESUM<span className="text-electricBlue">E</span>
             </h1>
           </div>
           <p className="text-latentGray font-mono text-sm uppercase tracking-widest mt-4">
-            [System Output: Downloadable Professional Profile]
+            [Downloadable Professional Profile]
           </p>
         </div>
 

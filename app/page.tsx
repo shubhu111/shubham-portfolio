@@ -52,7 +52,7 @@ export default function Home() {
             alt="Shubham Tade" 
             fill
             priority
-            className="object-cover grayscale contrast-[1.2] opacity-80 transition-all duration-300 object-[10%_30%] md:object-[center_30%]"
+            className="object-cover grayscale contrast-[1.2] opacity-80 transition-all duration-300 object-[12%_45%] md:object-[center_30%]"
           />
           
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1a] via-[#0a0f1a]/60 to-transparent"></div>
@@ -70,7 +70,7 @@ export default function Home() {
         >
           <div className="flex items-center gap-4 text-latentGray font-mono text-xs md:text-sm uppercase tracking-widest">
             <div className="h-2 w-2 bg-electricBlue rounded-full shadow-[0_0_8px_rgba(0,240,255,0.8)] animate-pulse"></div>
-            <p>[SYSTEM STATUS: ACTIVE]</p>
+            <p>[AVAILABLE FOR OPPORTUNITIES]</p>
           </div>
 
           <div className="space-y-3">
@@ -108,7 +108,7 @@ export default function Home() {
         >
           <div className="flex items-center gap-3 mb-6">
             <TerminalSquare className="text-electricBlue" size={24} />
-            <h2 className="text-xl font-mono tracking-widest text-latentGray uppercase">System initialization</h2>
+            <h2 className="text-xl font-mono tracking-widest text-latentGray uppercase">The Approach</h2>
           </div>
           <h3 className="text-3xl md:text-5xl font-black text-white leading-[1.2] tracking-tight">
             I don't just process data. I build <span className="text-electricBlue">functional systems</span> that connect complex algorithms to practical reality.

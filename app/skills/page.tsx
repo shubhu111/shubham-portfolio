@@ -102,11 +102,11 @@ export default function Skills() {
           <div className="flex items-center gap-3 mb-2">
             <Terminal className="text-electricBlue animate-pulse" size={28} />
             <h1 className="text-4xl font-bold tracking-widest text-white uppercase drop-shadow-lg">
-              System <span className="text-electricBlue">Architecture</span>
+              CORE TECHNICAL <span className="text-electricBlue">STACK</span>
             </h1>
           </div>
           <p className="text-latentGray font-mono text-sm uppercase tracking-widest mt-4">
-            [Loaded Modules: Exact Match via Resume Data Checkpoint]
+            [Frameworks, languages, and models deployed in production]
           </p>
         </div>
       </motion.div>
