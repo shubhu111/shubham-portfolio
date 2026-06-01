@@ -165,6 +165,62 @@ export default function Skills() {
         ))}
       </motion.div>
 
+      {/* --- CURRENTLY LEARNING SECTION --- */}
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.6 }}
+        className="w-full mt-24 pt-12 border-t border-latentGray/20"
+      >
+        <div className="mb-10">
+          <h2 className="text-3xl font-black text-white tracking-tight uppercase">
+            Currently <span className="text-electricBlue">Learning</span>
+          </h2>
+          <p className="text-latentGray font-mono text-xs uppercase tracking-widest mt-2">
+            [STATUS: IN-PROGRESS ROADMAPS & ACTIVE UPSKILLING]
+          </p>
+        </div>
+
+        {/* Dashed & slightly faded cards to indicate "In Progress" */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-80">
+          
+          {/* MLOps Card (Expanded CampusX Roadmap) */}
+          <div className="bg-[#0a0f1a]/40 border border-dashed border-electricBlue/40 rounded-2xl p-8 relative group hover:border-electricBlue/80 hover:bg-electricBlue/5 transition-all duration-300">
+            <h4 className="text-2xl font-bold text-white mb-4">MLOps Infrastructure</h4>
+            <p className="text-latentGray text-sm mb-6 leading-relaxed">
+              Currently undertaking a comprehensive 25-module deep dive into MLOps. Shifting from local notebooks to production-grade, end-to-end machine learning pipelines.
+            </p>
+            <div className="flex flex-wrap gap-2.5">
+              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">Git & DVC</span>
+              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">MLflow & DagsHub</span>
+              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">Docker Containerization</span>
+              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">AWS CI/CD</span>
+              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">Kubernetes (EKS)</span>
+              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">FastAPI Serving</span>
+              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">Prometheus & Grafana</span>
+            </div>
+          </div>
+
+          {/* GenAI Evaluation Card (Expanded Deep-Dive Syllabus) */}
+          <div className="bg-[#0a0f1a]/40 border border-dashed border-emerald-400/40 rounded-2xl p-8 relative group hover:border-emerald-400/80 hover:bg-emerald-400/5 transition-all duration-300">
+            <h4 className="text-2xl font-bold text-white mb-4">GenAI Evaluation</h4>
+            <p className="text-latentGray text-sm mb-6 leading-relaxed">
+              Working through a rigorous 6-chapter syllabus transitioning from legacy statistical metrics (BLEU/ROUGE) to modern semantic and agentic evaluation frameworks.
+            </p>
+            <div className="flex flex-wrap gap-2.5">
+              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">LLM-as-a-Judge</span>
+              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">RAGAS & DeepEval</span>
+              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">Context Precision & Recall</span>
+              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">Faithfulness Metrics</span>
+              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">Embedding-Based Eval</span>
+              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">LangSmith Tracing</span>
+            </div>
+          </div>
+
+        </div>
+      </motion.div>
+
     </div>
   );
 }
