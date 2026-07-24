@@ -6,6 +6,10 @@ import InteractiveBackground from "@/components/InteractiveBackground";
 export const metadata: Metadata = {
   title: "Shubham Tade | AI Engineer",
   description: "Digital Twin & Neural Portfolio",
+  metadataBase: new URL('https://shubham-tade.vercel.app'),
+  alternates: {
+    canonical: '/',
+  },
   verification: {
     google: "a0sr7KP1TQZA0hPpn65Q8r-W2swR17LNnTAm2fVDy0E",
   },
