@@ -6,6 +6,9 @@ import InteractiveBackground from "@/components/InteractiveBackground";
 export const metadata: Metadata = {
   title: "Shubham Tade | AI Engineer",
   description: "Digital Twin & Neural Portfolio",
+  verification: {
+    google: "a0sr7KP1TQZA0hPpn65Q8r-W2swR17LNnTAm2fVDy0E",
+  },
 };
 
 export default function RootLayout({
