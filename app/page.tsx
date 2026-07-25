@@ -49,7 +49,7 @@ export default function Home() {
           
           <Image 
             src="/hero-profile.jpeg" 
-            alt="Shubham Tade" 
+            alt="Shubham Gajanan Tade - AI/ML Engineer" 
             fill
             priority
             className="object-cover grayscale contrast-[1.2] opacity-80 transition-all duration-300 object-[12%_45%] md:object-[center_30%]"

@@ -5,8 +5,17 @@ import Navbar from "@/components/Navbar";
 import InteractiveBackground from "@/components/InteractiveBackground";
 
 export const metadata: Metadata = {
-  title: "Shubham Tade | AI Engineer",
-  description: "Digital Twin & Neural Portfolio",
+  title: "Shubham Gajanan Tade | AI/ML Engineer & Data Analyst",
+  description: "Official portfolio of Shubham Gajanan Tade (Shubham Tade). AI/ML Engineer and Data Analyst specializing in data cleaning, frontend deployment, and advanced Generative AI.",
+  keywords: [
+    "Shubham Tade", 
+    "Shubham Gajanan Tade", 
+    "shubhu111", 
+    "AI/ML Engineer", 
+    "Data Analyst", 
+    "Generative AI", 
+    "Pune"
+  ],
   metadataBase: new URL('https://shubham-tade.vercel.app'),
   alternates: {
     canonical: '/',
@@ -27,12 +36,13 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "Shubham Gajanan Tade",
-    "alternateName": "Shubham Tade",
+    "alternateName": ["Shubham Tade", "shubhu111"],
     "jobTitle": "AI/ML Engineer and Data Analyst",
     "url": "https://shubham-tade.vercel.app",
     "sameAs": [
       "https://www.linkedin.com/in/shubham-tade123/",
-      "https://github.com/shubhu111"
+      "https://github.com/shubhu111",
+      "https://www.instagram.com/shubhamtade2068/"
     ],
     "address": {
       "@type": "PostalAddress",
@@ -40,7 +50,7 @@ export default function RootLayout({
       "addressRegion": "Maharashtra",
       "addressCountry": "India"
     },
-    "description": "AI/ML Engineer and Data Analyst specializing in Generative AI, Retrieval-Augmented Generation (RAG), and developing applied AI projects bridging the gap between raw data and intelligent user experiences.",
+    "description": "AI/ML Engineer and Data Analyst balancing machine learning architectures with comprehensive data analysis. Developed expertise in Generative AI, Retrieval-Augmented Generation (RAG), and LangChain through dedicated post-degree professional training.",
     "knowsAbout": [
       "Generative AI",
       "Retrieval-Augmented Generation (RAG)",
@@ -57,7 +67,7 @@ export default function RootLayout({
     "hasCredential": {
       "@type": "EducationalOccupationalCredential",
       "credentialCategory": "Certification",
-      "name": "Data Science Certification",
+      "name": "Data Science Certification (Post-Degree)",
       "recognizedBy": {
         "@type": "Organization",
         "name": "3RI Technology"
@@ -74,7 +84,7 @@ export default function RootLayout({
         "itemOffered": {
           "@type": "SoftwareApplication",
           "name": "Caresila Hospital Portal",
-          "description": "A web application built with Supabase and Vercel to aggregate and verify hospital data across India."
+          "description": "A web application built to aggregate and verify hospital data across India, with a core focus on data cleaning, data collection, and frontend deployment."
         }
       },
       {
