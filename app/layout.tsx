@@ -6,7 +6,7 @@ import InteractiveBackground from "@/components/InteractiveBackground";
 
 export const metadata: Metadata = {
   title: "Shubham Gajanan Tade | AI/ML Engineer & Data Analyst",
-  description: "Official portfolio of Shubham Gajanan Tade (Shubham Tade). AI/ML Engineer and Data Analyst specializing in data cleaning, frontend deployment, and advanced Generative AI.",
+  description: "Official portfolio of Shubham Gajanan Tade (Shubham Tade) — AI/ML Engineer & Data Analyst specializing in data cleaning, web deployment, and Generative AI.",
   keywords: [
     "Shubham Tade", 
     "Shubham Gajanan Tade", 
@@ -50,7 +50,7 @@ export default function RootLayout({
       "addressRegion": "Maharashtra",
       "addressCountry": "India"
     },
-    "description": "AI/ML Engineer and Data Analyst balancing machine learning architectures with comprehensive data analysis. Developed expertise in Generative AI, Retrieval-Augmented Generation (RAG), and LangChain through dedicated post-degree professional training.",
+    "description": "AI/ML Engineer & Data Analyst combining ML architectures with data analysis. Expert in Generative AI, RAG, and LangChain via post-degree training.",
     "knowsAbout": [
       "Generative AI",
       "Retrieval-Augmented Generation (RAG)",
