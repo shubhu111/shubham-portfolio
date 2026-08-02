@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import InteractiveBackground from "@/components/InteractiveBackground";
 
 export const metadata: Metadata = {
-  title: "Shubham Gajanan Tade | AI/ML Engineer & Data Analyst",
+  title: "Shubham Tade | AI/ML Engineer & Data Analyst (Shubham Gajanan Tade)",
   description: "Official portfolio of Shubham Gajanan Tade (Shubham Tade) — AI/ML Engineer & Data Analyst specializing in data cleaning, web deployment, and Generative AI.",
   keywords: [
     "Shubham Tade", 
@@ -23,6 +23,27 @@ export const metadata: Metadata = {
   verification: {
     google: "a0sr7KP1TQZA0hPpn65Q8r-W2swR17LNnTAm2fVDy0E",
   },
+  openGraph: {
+    title: "Shubham Tade | AI/ML Engineer & Data Analyst",
+    description: "Official portfolio of Shubham Gajanan Tade (Shubham Tade) — AI/ML Engineer & Data Analyst.",
+    url: "https://shubham-tade.vercel.app",
+    siteName: "Shubham Tade Portfolio",
+    images: [
+      {
+        url: "https://shubham-tade.vercel.app/hero-profile.jpeg",
+        width: 1200,
+        height: 630,
+        alt: "Shubham Tade Hero Profile",
+      },
+      {
+        url: "https://shubham-tade.vercel.app/profile.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Shubham Tade Profile Picture",
+      },
+    ],
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -39,6 +60,10 @@ export default function RootLayout({
     "alternateName": ["Shubham Tade", "shubhu111"],
     "jobTitle": "AI/ML Engineer and Data Analyst",
     "url": "https://shubham-tade.vercel.app",
+    "image": [
+      "https://shubham-tade.vercel.app/hero-profile.jpeg",
+      "https://shubham-tade.vercel.app/profile.jpg"
+    ],
     "sameAs": [
       "https://www.linkedin.com/in/shubham-tade123/",
       "https://github.com/shubhu111",
