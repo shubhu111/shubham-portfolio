@@ -155,7 +155,7 @@ export default function AskMeWidget() {
     setInput('');
 
     try {
-      const response = await fetch("https://your-st-gpt-engine.onrender.com/api/chat", {
+      const response = await fetch("https://shubham-portfolio-toww.onrender.com/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: message, mode: mode }),
