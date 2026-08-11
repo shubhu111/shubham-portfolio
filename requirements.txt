@@ -1,0 +1,24 @@
+
+google-generativeai 
+
+langchain-community
+google-genai
+
+# Web Framework & Server
+fastapi
+uvicorn[standard]
+pydantic
+
+# LangGraph & Core AI
+langgraph
+langchain-core
+langchain-google-genai
+
+# Native Google GenAI (Used for the embedding client)
+google-genai
+
+# Vector Database
+qdrant-client
+
+# Environment Variables
+python-dotenv

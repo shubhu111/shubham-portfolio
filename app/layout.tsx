@@ -3,6 +3,7 @@ import { GoogleTagManager } from "@next/third-parties/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import InteractiveBackground from "@/components/InteractiveBackground";
+import AskMeWidget from "@/components/AskMeWidget";
 
 export const metadata: Metadata = {
   title: "Shubham Tade | AI/ML Engineer & Data Analyst (Shubham Gajanan Tade)",
@@ -167,6 +168,9 @@ export default function RootLayout({
         <main className="w-full max-w-[1800px] mx-auto px-4 pt-28 pb-12 md:px-8 min-h-screen relative z-10">
           {children}
         </main>
+
+        {/* --- GLOBAL FLOATING AGENT --- */}
+        <AskMeWidget />
       </body>
     </html>
   );

@@ -1,226 +1,24 @@
-"use client";
+import { client } from "@/sanity/lib/client";
+import SkillsClient from "./SkillsClient";
 
-import { motion } from "framer-motion";
-import { 
-  Network, 
-  Cpu, 
-  Terminal, 
-  BrainCircuit, 
-  MessageSquareText, 
-  BarChart3, 
-  Wrench 
-} from "lucide-react";
+// Ensure Next.js refetches this data periodically (e.g., every 60 seconds)
+export const revalidate = 60;
 
-// Mapped EXACTLY from your uploaded resume
-const skillModules = [
-  {
-    title: "GenAI",
-    icon: <BrainCircuit className="text-electricBlue group-hover:animate-pulse" size={28} />,
-    color: "group-hover:border-electricBlue/50",
-    glow: "from-electricBlue/10",
-    description: "Architecting context-aware reasoning engines & LLM integrations.",
-    skills: ["RAG", "LLM", "Vector Database", "FAISS", "Embeddings"]
-  },
-  {
-    title: "Deep Learning",
-    icon: <Network className="text-purple-400 group-hover:animate-pulse" size={28} />,
-    color: "group-hover:border-purple-400/50",
-    glow: "from-purple-400/10",
-    description: "Building complex neural networks for pattern recognition.",
-    skills: ["ANN", "CNN", "RNN", "LSTM", "GRU", "Encoder - Decoder", "Transformers"]
-  },
-  {
-    title: "Machine Learning",
-    icon: <Cpu className="text-blue-400 group-hover:animate-pulse" size={28} />,
-    color: "group-hover:border-blue-400/50",
-    glow: "from-blue-400/10",
-    description: "Developing and optimizing predictive algorithms.",
-    skills: ["Supervised Learning", "Unsupervised Learning", "Data Preprocessing", "Model Evaluation"]
-  },
-  {
-    title: "NLP",
-    icon: <MessageSquareText className="text-emerald-400 group-hover:animate-pulse" size={28} />,
-    color: "group-hover:border-emerald-400/50",
-    glow: "from-emerald-400/10",
-    description: "Extracting insights and structure from natural language.",
-    skills: ["Text Classification", "Tokenization", "Named Entity Recognition (NER)"]
-  },
-  {
-    title: "Data Analytics",
-    icon: <BarChart3 className="text-amber-400 group-hover:animate-pulse" size={28} />,
-    color: "group-hover:border-amber-400/50",
-    glow: "from-amber-400/10",
-    description: "Analyzing distributions and correlating complex datasets.",
-    skills: ["Advanced Excel", "Power BI", "EDA", "Data Cleaning", "Correlation", "Distribution"]
-  },
-  {
-    title: "Languages & Tools",
-    icon: <Wrench className="text-pink-400 group-hover:animate-pulse" size={28} />,
-    color: "group-hover:border-pink-400/50",
-    glow: "from-pink-400/10",
-    description: "The core stack powering data pipelines and model serving.",
-    skills: ["Python", "SQL", "LangChain", "NumPy", "Pandas", "Seaborn", "Sci-kit-learn", "TensorFlow", "NLTK", "Git", "Streamlit"]
-  }
-];
+export default async function SkillsPage() {
+  // Fetch both schemas simultaneously and order them
+  const query = `{
+    "techStack": *[_type == "techStack"] | order(displayOrder asc) {
+      _id, domainTitle, iconName, colorTheme, description, skillTags
+    },
+    "learning": *[_type == "currentlyLearning"] | order(displayOrder asc) {
+      _id, roadmapTitle, colorTheme, description, topicTags
+    }
+  }`;
+  
+  const data = await client.fetch(query);
+  const techStack = data.techStack || [];
+  const learning = data.learning || [];
 
-// Entrance animation variants
-const containerVariants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100 } }
-};
-
-export default function Skills() {
-  return (
-    <div className="flex flex-col items-center justify-start min-h-[85vh] max-w-6xl mx-auto w-full pb-12 h-full relative z-10">
-      
-      {/* PURE CSS INFINITE FLOAT ANIMATION (INCREASED MOTION) */}
-      <style>{`
-        @keyframes customFloat {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-15px); } /* Increased travel distance */
-        }
-        .animate-custom-float {
-          animation: customFloat 3s ease-in-out infinite; /* Sped up from 4s to 3s */
-        }
-      `}</style>
-
-      {/* Header Section */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full flex flex-col md:flex-row items-end justify-between mb-12 border-b border-latentGray/20 pb-8"
-      >
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <Terminal className="text-electricBlue animate-pulse" size={28} />
-            <h1 className="text-4xl font-bold tracking-widest text-white uppercase drop-shadow-lg">
-              CORE TECHNICAL <span className="text-electricBlue">STACK</span>
-            </h1>
-          </div>
-          <p className="text-latentGray font-mono text-sm uppercase tracking-widest mt-4">
-            [Frameworks, languages, and models deployed in production]
-          </p>
-        </div>
-      </motion.div>
-
-      {/* Grid of Skill Modules */}
-      <motion.div 
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full"
-      >
-        {skillModules.map((module, index) => (
-          <motion.div 
-            key={index}
-            variants={itemVariants} 
-            className="h-full"
-          >
-            <div 
-              className="animate-custom-float h-full" 
-              style={{ animationDelay: `${index * 0.25}s` }} /* Slightly adjusted stagger to match new speed */
-            >
-              <div className={`bg-[#0a0f1a]/80 border border-latentGray/20 rounded-xl p-6 backdrop-blur-md group transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-[1.02] flex flex-col h-full relative overflow-hidden ${module.color}`}>
-                
-                {/* Thematic glowing background gradient on hover */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${module.glow} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}></div>
-                
-                <div className="relative z-10 flex flex-col h-full">
-                  {/* Icon & Title */}
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="p-3 bg-white/5 rounded-lg border border-white/10 group-hover:border-white/20 transition-colors shadow-inner">
-                      {module.icon}
-                    </div>
-                    <h3 className="text-white font-bold tracking-wider text-xl drop-shadow-md">{module.title}</h3>
-                  </div>
-                  
-                  {/* Description */}
-                  <p className="text-latentGray font-mono text-xs mb-6 h-10 leading-relaxed">
-                    {module.description}
-                  </p>
-
-                  {/* Interactive Skill Tags */}
-                  <div className="flex flex-wrap gap-2 mt-auto">
-                    {module.skills.map((skill, skillIdx) => (
-                      <span 
-                        key={skillIdx}
-                        className="text-[11px] font-mono border border-latentGray/30 px-3 py-1.5 text-latentGray/90 rounded-md bg-[#0a0f1a] transition-colors cursor-default shadow-sm group-hover:border-white/20 group-hover:text-white hover:bg-white/10"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </motion.div>
-
-      {/* --- CURRENTLY LEARNING SECTION --- */}
-      <motion.div 
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.6 }}
-        className="w-full mt-24 pt-12 border-t border-latentGray/20"
-      >
-        <div className="mb-10">
-          <h2 className="text-3xl font-black text-white tracking-tight uppercase">
-            Currently <span className="text-electricBlue">Learning</span>
-          </h2>
-          <p className="text-latentGray font-mono text-xs uppercase tracking-widest mt-2">
-            [STATUS: IN-PROGRESS ROADMAPS & ACTIVE UPSKILLING]
-          </p>
-        </div>
-
-        {/* Dashed & slightly faded cards to indicate "In Progress" */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-80">
-          
-          {/* MLOps Card (Expanded CampusX Roadmap) */}
-          <div className="bg-[#0a0f1a]/40 border border-dashed border-electricBlue/40 rounded-2xl p-8 relative group hover:border-electricBlue/80 hover:bg-electricBlue/5 transition-all duration-300">
-            <h4 className="text-2xl font-bold text-white mb-4">MLOps Infrastructure</h4>
-            <p className="text-latentGray text-sm mb-6 leading-relaxed">
-              Currently undertaking a comprehensive 25-module deep dive into MLOps. Shifting from local notebooks to production-grade, end-to-end machine learning pipelines.
-            </p>
-            <div className="flex flex-wrap gap-2.5">
-              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">Git & DVC</span>
-              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">MLflow & DagsHub</span>
-              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">Docker Containerization</span>
-              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">AWS CI/CD</span>
-              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">Kubernetes (EKS)</span>
-              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">FastAPI Serving</span>
-              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">Prometheus & Grafana</span>
-            </div>
-          </div>
-
-          {/* GenAI Evaluation Card (Expanded Deep-Dive Syllabus) */}
-          <div className="bg-[#0a0f1a]/40 border border-dashed border-emerald-400/40 rounded-2xl p-8 relative group hover:border-emerald-400/80 hover:bg-emerald-400/5 transition-all duration-300">
-            <h4 className="text-2xl font-bold text-white mb-4">GenAI Evaluation</h4>
-            <p className="text-latentGray text-sm mb-6 leading-relaxed">
-              Working through a rigorous 6-chapter syllabus transitioning from legacy statistical metrics (BLEU/ROUGE) to modern semantic and agentic evaluation frameworks.
-            </p>
-            <div className="flex flex-wrap gap-2.5">
-              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">LLM-as-a-Judge</span>
-              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">RAGAS & DeepEval</span>
-              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">Context Precision & Recall</span>
-              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">Faithfulness Metrics</span>
-              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">Embedding-Based Eval</span>
-              <span className="text-[11px] font-mono border border-latentGray/30 text-latentGray px-3 py-1.5 rounded-md hover:text-white transition-colors">LangSmith Tracing</span>
-            </div>
-          </div>
-
-        </div>
-      </motion.div>
-
-    </div>
-  );
+  // Pass the fully populated data directly into the animated Client Component
+  return <SkillsClient initialTechStack={techStack} initialLearning={learning} />;
 }
