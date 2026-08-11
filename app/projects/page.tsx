@@ -1,4 +1,4 @@
-import { client } from "@/sanity/lib/client";
+import { client } from "../../sanity/lib/client";
 import ProjectsClient from "./ProjectsClient";
 
 // Ensure Next.js refetches this data periodically (e.g., every 60 seconds)
