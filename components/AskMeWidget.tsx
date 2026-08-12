@@ -109,6 +109,7 @@ const FormattedMessage = ({ content }: { content: string }) => {
 export default function AskMeWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<'RECRUITER' | 'TECH_LEAD'>('RECRUITER');
+  const [threadId, setThreadId] = useState<string>('');
   
   const [messages, setMessages] = useState<string[]>([
     `Hello! I'm ST-GPT, the digital representative for Shubham Tade. \n\nI am an autonomous agent connected directly to his professional database. I can:\n• Fetch real-time GitHub commits\n• Cross-reference his skills with a Job Description\n• Guide you through his projects and system architectures\n• Navigate this portfolio for you\n\nHow can I assist you today? Try clicking one of the suggestions below!`
@@ -117,6 +118,15 @@ export default function AskMeWidget() {
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
+  useEffect(() => {
+    let session = sessionStorage.getItem("st_gpt_thread_id");
+    if (!session) {
+      session = `session_${Math.random().toString(36).substring(2, 9)}_${Date.now()}`;
+      sessionStorage.setItem("st_gpt_thread_id", session);
+    }
+    setThreadId(session);
+  }, []);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -158,7 +168,11 @@ export default function AskMeWidget() {
       const response = await fetch("https://shubham-portfolio-toww.onrender.com/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: message, mode: mode }),
+        body: JSON.stringify({ 
+          message: message, 
+          mode: mode, 
+          thread_id: threadId || "default_session" 
+        }),
       });
 
       if (!response.body) return;
@@ -301,7 +315,7 @@ export default function AskMeWidget() {
                     placeholder={mode === 'RECRUITER' ? "Ask about business impact & experience..." : "Ask about architectures & vectors..."} 
                     minRows={1}
                     maxRows={6}
-                    className="flex-grow bg-transparent text-white text-sm md:text-base placeholder:text-slate-500 outline-none resize-none overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                    className="flex-grow bg-transparent text-[#ffffff] text-sm md:text-base placeholder:text-slate-500 outline-none resize-none overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                   />
                   <button type="submit" className="text-slate-400 hover:text-[#2CD4EF] transition mb-0.5">
                     <Send size={18} />

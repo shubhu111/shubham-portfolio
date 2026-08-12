@@ -179,6 +179,14 @@ def fetch_github_activity(username: str = "shubhu111"):
 async def root():
     return {"status": "online", "engine": "Direct Enterprise RAG Agent", "vector_db": "Connected"}
 
+@app.get("/api/ping-db")
+async def ping_database():
+    try:
+        qdrant.get_collections()
+        return {"status": "success", "message": "Qdrant is awake!"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
 async def generate_chat_stream(user_message: str, mode: str, thread_id: str = "default_session"):
     print(f"\n--- INCOMING MESSAGE: {user_message} | MODE: {mode} | THREAD: {thread_id} ---")
     
