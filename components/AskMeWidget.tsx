@@ -25,14 +25,12 @@ const GeminiIcon = ({ className = "w-6 h-6" }) => (
   </svg>
 );
 
-// Map the keys from the backend to your actual image URLs
 const IMAGE_MAP: Record<string, string> = {
   'st_gpt_architecture': 'https://placehold.co/600x400/1e293b/2CD4EF?text=ST-GPT+Architecture+Diagram',
   'caresila_ui': 'https://placehold.co/600x400/1e293b/2CD4EF?text=Caresila+Portal+UI',
   'iot_car': 'https://placehold.co/600x400/1e293b/2CD4EF?text=IoT+Smart+Car+Build'
 };
 
-// Animated thinking indicator component
 const ThinkingIndicator = () => (
   <div className="flex items-center gap-2 text-[#2CD4EF] font-medium text-sm py-0.5">
     <Sparkles className="w-4 h-4 animate-spin text-[#2CD4EF]" />
@@ -45,7 +43,6 @@ const ThinkingIndicator = () => (
   </div>
 );
 
-// Sub-component to parse standard markdown links
 const MarkdownLinks = ({ text }: { text: string }) => {
   const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
   const parts = [];
@@ -76,13 +73,11 @@ const MarkdownLinks = ({ text }: { text: string }) => {
   return <>{parts}</>;
 };
 
-// Main parser that handles both images and text
 const FormattedMessage = ({ content }: { content: string }) => {
   if (content === '...') {
     return <ThinkingIndicator />;
   }
 
-  // Regex to split the text by the [IMAGE:key] tags
   const imageRegex = /(\[IMAGE:[^\]]+\])/g;
   const parts = content.split(imageRegex);
 
@@ -99,7 +94,6 @@ const FormattedMessage = ({ content }: { content: string }) => {
             </div>
           );
         }
-        // Wrapping this in a <span> prevents flex-col from breaking inline content
         return <span key={index}><MarkdownLinks text={part} /></span>;
       })}
     </div>
@@ -117,6 +111,9 @@ export default function AskMeWidget() {
   
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // Ref to track if an action has already been executed during the current message stream
+  const actionTracker = useRef(new Set<string>());
   
   useEffect(() => {
     let session = sessionStorage.getItem("st_gpt_thread_id");
@@ -138,20 +135,28 @@ export default function AskMeWidget() {
   const handleDomActions = (text: string) => {
     let cleanText = text;
     
-    // 1. Handle DOM Scrolling
+    // Process Projects Scroll
     if (cleanText.includes("[ACTION:SCROLL_TO_PROJECTS]")) {
-      cleanText = cleanText.replace("[ACTION:SCROLL_TO_PROJECTS]", "");
-      document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
-    }
-    if (cleanText.includes("[ACTION:SCROLL_TO_RESUME]")) {
-      cleanText = cleanText.replace("[ACTION:SCROLL_TO_RESUME]", "");
-      document.getElementById("resume")?.scrollIntoView({ behavior: "smooth" });
+      cleanText = cleanText.replace(/\[ACTION:SCROLL_TO_PROJECTS\]/g, "");
+      if (!actionTracker.current.has("projects")) {
+        actionTracker.current.add("projects");
+        setTimeout(() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" }), 100);
+      }
     }
 
-    // 2. THE FIX: Aggressively target Markdown link brackets and parentheses
+    // Process Resume Scroll
+    if (cleanText.includes("[ACTION:SCROLL_TO_RESUME]")) {
+      cleanText = cleanText.replace(/\[ACTION:SCROLL_TO_RESUME\]/g, "");
+      if (!actionTracker.current.has("resume")) {
+        actionTracker.current.add("resume");
+        setTimeout(() => document.getElementById("resume")?.scrollIntoView({ behavior: "smooth" }), 100);
+      }
+    }
+
+    // Clean up Markdown link rendering
     cleanText = cleanText
-      .replace(/-\s*[\r\n]+\s*\[/g, "- [")   // Pulls the opening bracket '[' up to the dash '-'
-      .replace(/\)\s*[\r\n]+\s*:/g, "): ");  // Pulls the colon ':' up to the closing parenthesis ')'
+      .replace(/-\s*[\r\n]+\s*\[/g, "- [")
+      .replace(/\)\s*[\r\n]+\s*:/g, "): ");
 
     return cleanText;
   };
@@ -160,6 +165,9 @@ export default function AskMeWidget() {
 
   const handleSendMessage = async (message: string) => {
     if (!message.trim()) return;
+    
+    // Clear the tracker so new scroll actions are allowed for this new message
+    actionTracker.current.clear();
     
     setMessages((prev) => [...prev, `You: ${message}`, `...`]);
     setInput('');
