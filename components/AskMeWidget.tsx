@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, X, Send, Briefcase, Code2, ExternalLink, Sparkles } from 'lucide-react';
 import TextareaAutosize from 'react-textarea-autosize';
+import { useRouter } from 'next/navigation'; // <-- NEW IMPORT FOR ROUTING
 
 const PRESET_QUESTIONS = [
   "Fetch live GitHub activity stats",
@@ -101,10 +102,11 @@ const FormattedMessage = ({ content }: { content: string }) => {
 };
 
 export default function AskMeWidget() {
+  const router = useRouter(); // <-- INITIALIZE NEXT.JS ROUTER
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<'RECRUITER' | 'TECH_LEAD'>('RECRUITER');
   const [threadId, setThreadId] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(false); // NEW: Prevents double-sending
+  const [isLoading, setIsLoading] = useState(false);
   
   const [messages, setMessages] = useState<string[]>([
     `Hello! I'm ST-GPT, the digital representative for Shubham Tade. \n\nI am an autonomous agent connected directly to his professional database. I can:\n• Fetch real-time GitHub commits\n• Cross-reference his skills with a Job Description\n• Guide you through his projects and system architectures\n• Navigate this portfolio for you\n\nHow can I assist you today? Try clicking one of the suggestions below!`
@@ -134,11 +136,13 @@ export default function AskMeWidget() {
   const handleDomActions = (text: string) => {
     let cleanText = text;
     
+    // UPDATED: Use Next.js routing instead of DOM scrolling
     if (cleanText.includes("[ACTION:SCROLL_TO_PROJECTS]")) {
       cleanText = cleanText.replace(/\[ACTION:SCROLL_TO_PROJECTS\]/g, "");
       if (!actionTracker.current.has("projects")) {
         actionTracker.current.add("projects");
-        setTimeout(() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" }), 100);
+        setIsOpen(false); // Close the widget so they can see the new page
+        router.push("/projects"); 
       }
     }
 
@@ -146,7 +150,8 @@ export default function AskMeWidget() {
       cleanText = cleanText.replace(/\[ACTION:SCROLL_TO_RESUME\]/g, "");
       if (!actionTracker.current.has("resume")) {
         actionTracker.current.add("resume");
-        setTimeout(() => document.getElementById("resume")?.scrollIntoView({ behavior: "smooth" }), 100);
+        setIsOpen(false); // Close the widget so they can see the new page
+        router.push("/resume"); 
       }
     }
 
@@ -160,7 +165,7 @@ export default function AskMeWidget() {
   const toggleWidget = () => setIsOpen(!isOpen);
 
   const handleSendMessage = async (message: string) => {
-    if (!message.trim() || isLoading) return; // Prevent double firing
+    if (!message.trim() || isLoading) return;
     
     setIsLoading(true);
     actionTracker.current.clear();
@@ -187,16 +192,13 @@ export default function AskMeWidget() {
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
       let aiFullResponse = "";
-      let buffer = ""; // NEW: Buffers broken network chunks
+      let buffer = ""; 
 
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
         
-        // Append new data to our buffer
         buffer += decoder.decode(value, { stream: true });
-        
-        // Split by newlines, but KEEP the last incomplete line in the buffer
         const lines = buffer.split("\n");
         buffer = lines.pop() || ""; 
         
@@ -218,7 +220,7 @@ export default function AskMeWidget() {
                 });
               }
             } catch (e) {
-              // Silently ignore malformed JSON (though the buffer prevents this now)
+              // Silently ignore malformed JSON 
             }
           }
         }
@@ -230,7 +232,7 @@ export default function AskMeWidget() {
         return newMessages;
       });
     } finally {
-      setIsLoading(false); // Unlock the chat when finished
+      setIsLoading(false); 
     }
   };
 
