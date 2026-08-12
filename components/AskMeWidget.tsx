@@ -136,12 +136,20 @@ export default function AskMeWidget() {
   const handleDomActions = (text: string) => {
     let cleanText = text;
     
-    // UPDATED: Use Next.js routing instead of DOM scrolling
+    if (cleanText.includes("[ACTION:SCROLL_TO_HOME]")) {
+      cleanText = cleanText.replace(/\[ACTION:SCROLL_TO_HOME\]/g, "");
+      if (!actionTracker.current.has("home")) {
+        actionTracker.current.add("home");
+        setIsOpen(false); 
+        router.push("/"); 
+      }
+    }
+
     if (cleanText.includes("[ACTION:SCROLL_TO_PROJECTS]")) {
       cleanText = cleanText.replace(/\[ACTION:SCROLL_TO_PROJECTS\]/g, "");
       if (!actionTracker.current.has("projects")) {
         actionTracker.current.add("projects");
-        setIsOpen(false); // Close the widget so they can see the new page
+        setIsOpen(false); 
         router.push("/projects"); 
       }
     }
@@ -150,8 +158,26 @@ export default function AskMeWidget() {
       cleanText = cleanText.replace(/\[ACTION:SCROLL_TO_RESUME\]/g, "");
       if (!actionTracker.current.has("resume")) {
         actionTracker.current.add("resume");
-        setIsOpen(false); // Close the widget so they can see the new page
+        setIsOpen(false); 
         router.push("/resume"); 
+      }
+    }
+
+    if (cleanText.includes("[ACTION:SCROLL_TO_SKILLS]")) {
+      cleanText = cleanText.replace(/\[ACTION:SCROLL_TO_SKILLS\]/g, "");
+      if (!actionTracker.current.has("skills")) {
+        actionTracker.current.add("skills");
+        setIsOpen(false); 
+        router.push("/skills"); 
+      }
+    }
+
+    if (cleanText.includes("[ACTION:SCROLL_TO_CONTACT]")) {
+      cleanText = cleanText.replace(/\[ACTION:SCROLL_TO_CONTACT\]/g, "");
+      if (!actionTracker.current.has("contact")) {
+        actionTracker.current.add("contact");
+        setIsOpen(false); 
+        router.push("/contact"); 
       }
     }
 
