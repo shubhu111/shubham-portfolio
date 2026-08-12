@@ -45,7 +45,8 @@ const ThinkingIndicator = () => (
 );
 
 const MarkdownLinks = ({ text }: { text: string }) => {
-  const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
+  // UPDATED: Now supports http, https, mailto (emails), and tel (phone numbers)
+  const linkRegex = /\[([^\]]+)\]\(((?:https?:\/\/|mailto:|tel:)[^\s)]+)\)/g;
   const parts = [];
   let lastIndex = 0;
   let match;
