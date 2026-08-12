@@ -104,6 +104,7 @@ export default function AskMeWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<'RECRUITER' | 'TECH_LEAD'>('RECRUITER');
   const [threadId, setThreadId] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false); // NEW: Prevents double-sending
   
   const [messages, setMessages] = useState<string[]>([
     `Hello! I'm ST-GPT, the digital representative for Shubham Tade. \n\nI am an autonomous agent connected directly to his professional database. I can:\n• Fetch real-time GitHub commits\n• Cross-reference his skills with a Job Description\n• Guide you through his projects and system architectures\n• Navigate this portfolio for you\n\nHow can I assist you today? Try clicking one of the suggestions below!`
@@ -111,8 +112,6 @@ export default function AskMeWidget() {
   
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  
-  // Ref to track if an action has already been executed during the current message stream
   const actionTracker = useRef(new Set<string>());
   
   useEffect(() => {
@@ -135,7 +134,6 @@ export default function AskMeWidget() {
   const handleDomActions = (text: string) => {
     let cleanText = text;
     
-    // Process Projects Scroll
     if (cleanText.includes("[ACTION:SCROLL_TO_PROJECTS]")) {
       cleanText = cleanText.replace(/\[ACTION:SCROLL_TO_PROJECTS\]/g, "");
       if (!actionTracker.current.has("projects")) {
@@ -144,7 +142,6 @@ export default function AskMeWidget() {
       }
     }
 
-    // Process Resume Scroll
     if (cleanText.includes("[ACTION:SCROLL_TO_RESUME]")) {
       cleanText = cleanText.replace(/\[ACTION:SCROLL_TO_RESUME\]/g, "");
       if (!actionTracker.current.has("resume")) {
@@ -153,7 +150,6 @@ export default function AskMeWidget() {
       }
     }
 
-    // Clean up Markdown link rendering
     cleanText = cleanText
       .replace(/-\s*[\r\n]+\s*\[/g, "- [")
       .replace(/\)\s*[\r\n]+\s*:/g, "): ");
@@ -164,9 +160,9 @@ export default function AskMeWidget() {
   const toggleWidget = () => setIsOpen(!isOpen);
 
   const handleSendMessage = async (message: string) => {
-    if (!message.trim()) return;
+    if (!message.trim() || isLoading) return; // Prevent double firing
     
-    // Clear the tracker so new scroll actions are allowed for this new message
+    setIsLoading(true);
     actionTracker.current.clear();
     
     setMessages((prev) => [...prev, `You: ${message}`, `...`]);
@@ -183,17 +179,26 @@ export default function AskMeWidget() {
         }),
       });
 
-      if (!response.body) return;
+      if (!response.body) {
+        setIsLoading(false);
+        return;
+      }
+      
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
       let aiFullResponse = "";
+      let buffer = ""; // NEW: Buffers broken network chunks
 
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
         
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split("\n");
+        // Append new data to our buffer
+        buffer += decoder.decode(value, { stream: true });
+        
+        // Split by newlines, but KEEP the last incomplete line in the buffer
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || ""; 
         
         for (const line of lines) {
           if (line.startsWith("data: ")) {
@@ -212,7 +217,9 @@ export default function AskMeWidget() {
                   return newMessages;
                 });
               }
-            } catch (e) {}
+            } catch (e) {
+              // Silently ignore malformed JSON (though the buffer prevents this now)
+            }
           }
         }
       }
@@ -222,15 +229,15 @@ export default function AskMeWidget() {
         newMessages[newMessages.length - 1] = "Error: Cannot connect to ST-GPT Engine.";
         return newMessages;
       });
+    } finally {
+      setIsLoading(false); // Unlock the chat when finished
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter') {
-      if (!e.shiftKey) {
-        e.preventDefault(); 
-        handleSendMessage(input); 
-      }
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault(); 
+      handleSendMessage(input); 
     }
   };
 
@@ -268,13 +275,15 @@ export default function AskMeWidget() {
                 <div className="flex bg-slate-900 rounded-lg p-1 border border-slate-700">
                   <button 
                     onClick={() => setMode('RECRUITER')}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${mode === 'RECRUITER' ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-slate-200'}`}
+                    disabled={isLoading}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${mode === 'RECRUITER' ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-slate-200'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     <Briefcase size={14} /> Recruiter
                   </button>
                   <button 
                     onClick={() => setMode('TECH_LEAD')}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${mode === 'TECH_LEAD' ? 'bg-[#2CD4EF]/20 text-[#2CD4EF]' : 'text-slate-400 hover:text-slate-200'}`}
+                    disabled={isLoading}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${mode === 'TECH_LEAD' ? 'bg-[#2CD4EF]/20 text-[#2CD4EF]' : 'text-slate-400 hover:text-slate-200'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     <Code2 size={14} /> Tech Lead
                   </button>
@@ -300,7 +309,8 @@ export default function AskMeWidget() {
                       <button 
                         key={question} 
                         onClick={() => handleSendMessage(question)}
-                        className="flex items-center gap-3 text-left px-4 py-2.5 bg-slate-800/60 hover:bg-slate-700 border border-slate-700/80 rounded-xl transition-all duration-300"
+                        disabled={isLoading}
+                        className={`flex items-center gap-3 text-left px-4 py-2.5 bg-slate-800/60 hover:bg-slate-700 border border-slate-700/80 rounded-xl transition-all duration-300 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         <div className="w-1.5 h-1.5 rounded-full bg-[#2CD4EF]"></div>
                         <span className="text-slate-300 text-sm">{question}</span>
@@ -314,18 +324,19 @@ export default function AskMeWidget() {
               <div className="p-4 bg-[#0a0f1a] border-t border-slate-800">
                 <form 
                   onSubmit={(e) => { e.preventDefault(); handleSendMessage(input); }} 
-                  className="flex items-end gap-3 bg-slate-900/80 rounded-3xl border border-slate-700 focus-within:border-[#2CD4EF] focus-within:ring-4 focus-within:ring-[#2CD4EF]/20 focus-within:shadow-[0_0_20px_rgba(44,212,239,0.2)] transition-all duration-300 px-4 py-3"
+                  className={`flex items-end gap-3 bg-slate-900/80 rounded-3xl border transition-all duration-300 px-4 py-3 ${isLoading ? 'border-slate-800 opacity-70' : 'border-slate-700 focus-within:border-[#2CD4EF] focus-within:ring-4 focus-within:ring-[#2CD4EF]/20 focus-within:shadow-[0_0_20px_rgba(44,212,239,0.2)]'}`}
                 >
                   <TextareaAutosize 
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    disabled={isLoading}
                     placeholder={mode === 'RECRUITER' ? "Ask about business impact & experience..." : "Ask about architectures & vectors..."} 
                     minRows={1}
                     maxRows={6}
                     className="flex-grow bg-transparent text-[#ffffff] text-sm md:text-base placeholder:text-slate-500 outline-none resize-none overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                   />
-                  <button type="submit" className="text-slate-400 hover:text-[#2CD4EF] transition mb-0.5">
+                  <button type="submit" disabled={isLoading || !input.trim()} className={`transition mb-0.5 ${isLoading || !input.trim() ? 'text-slate-600 cursor-not-allowed' : 'text-slate-400 hover:text-[#2CD4EF]'}`}>
                     <Send size={18} />
                   </button>
                 </form>
