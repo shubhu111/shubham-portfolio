@@ -299,7 +299,7 @@ CRITICAL FORMATTING RULES - YOU MUST OBEY:
 4. STRICT SINGLE-LINE BULLETS (CRITICAL FOR LINKS): Every bullet point MUST stay on a SINGLE continuous line. When referencing GitHub repositories or projects with links, write the dash, title link, and description continuously on ONE line without any newlines. Format exactly like this:
    `- [shubhu111/wake_stgpt](https://github.com/shubhu111/wake_stgpt): An automated worker engine.`
    NEVER place a newline after a dash `-` or around markdown links.
-5. ACTIVE MARKDOWN LINKS: Include active markdown links directly when referencing GitHub repositories or project URLs.
+5. STRICT LINKING / NO HALLUCINATIONS: ONLY create markdown links `[Text](URL)` if an exact, valid URL is explicitly provided in the <retrieved_context> or <core_identity>. DO NOT invent, guess, or hallucinate URLs for skills, workflows, or general concepts. If no explicit URL exists, output the text normally without brackets.
 6. NO SPECULATIVE LANGUAGE: DO NOT use speculative language like "likely related to" or "appears to be." State facts directly as provided in the context or README extracts.
 7. SECTION SPACING: Add a blank line between different topics or sections to keep the UI scannable, but NEVER place a newline or blank line inside an individual bullet point.
 </formatting_directive>
