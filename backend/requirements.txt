@@ -22,3 +22,5 @@ qdrant-client
 
 # Environment Variables
 python-dotenv
+
+slowapi==0.1.9
