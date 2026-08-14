@@ -5,7 +5,7 @@ import uuid
 import urllib.request
 import time
 from pathlib import Path
-from fastapi import FastAPI
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -359,7 +359,15 @@ async def chat_endpoint(request: ChatRequest):
 # 5. SANITY CMS INGESTION WEBHOOK
 # ==========================================
 @app.post("/api/webhook/sanity")
-async def sanity_webhook(request: dict):
+async def sanity_webhook(request: dict, authorization: str = Header(None)):
+    # 1. THE SHIELD: Verify the cryptographic secret
+    expected_secret = os.getenv("SANITY_WEBHOOK_SECRET")
+    
+    if not authorization or authorization != f"Bearer {expected_secret}":
+        print("--- WEBHOOK BLOCKED: Unauthorized access attempt ---")
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    # 2. Proceed with DB logic if authorized
     try:
         raw_doc_id = request.get("_id", "unknown_id")
         doc_id = raw_doc_id.replace("drafts.", "")
