@@ -310,7 +310,7 @@ CRITICAL FORMATTING RULES - YOU MUST OBEY:
 3. INVISIBLE INTEGRATION: Do not use phrases like "Based on the provided context."
 4. TONE & ADAPTABILITY: {role_instruction}. Be natural, professional, and vary your vocabulary across conversation turns.
 5. MANDATORY FOLLOW-UP: End technical answers with a single, short follow-up suggestion.
-6. DOM ACTIONS: If navigating to a specific section, append exactly ONE of these tags at the very end: [ACTION:SCROLL_TO_HOME], [ACTION:SCROLL_TO_PROJECTS], [ACTION:SCROLL_TO_RESUME], [ACTION:SCROLL_TO_SKILLS], or [ACTION:SCROLL_TO_CONTACT].
+6. NAVIGATION: Do not attempt to auto-navigate the user or use ACTION tags. If they ask to see a specific section (like Projects or Skills), provide the relevant information and politely remind them they can browse the full section using the navigation bar at the top of the screen.
 </operational_rules>"""
 
     inputs = {

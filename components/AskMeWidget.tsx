@@ -3,13 +3,12 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, X, Send, Briefcase, Code2, ExternalLink, Sparkles } from 'lucide-react';
 import TextareaAutosize from 'react-textarea-autosize';
-import { useRouter } from 'next/navigation'; // <-- NEW IMPORT FOR ROUTING
 
 const PRESET_QUESTIONS = [
+  "Tell me about shubham",
   "Fetch live GitHub activity stats",
   "Check JD match for an AI/Data role",
   "Show me live project links",
-  "Navigate me to the Resume section",
   "Show me the ST-GPT architecture",
   "What does Caresila look like?"
 ];
@@ -45,7 +44,6 @@ const ThinkingIndicator = () => (
 );
 
 const MarkdownLinks = ({ text }: { text: string }) => {
-  // UPDATED: Now supports http, https, mailto (emails), and tel (phone numbers)
   const linkRegex = /\[([^\]]+)\]\(((?:https?:\/\/|mailto:|tel:)[^\s)]+)\)/g;
   const parts = [];
   let lastIndex = 0;
@@ -103,19 +101,17 @@ const FormattedMessage = ({ content }: { content: string }) => {
 };
 
 export default function AskMeWidget() {
-  const router = useRouter(); // <-- INITIALIZE NEXT.JS ROUTER
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<'RECRUITER' | 'TECH_LEAD'>('RECRUITER');
   const [threadId, setThreadId] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   
   const [messages, setMessages] = useState<string[]>([
-    `Hello! I'm ST-GPT, the digital representative for Shubham Tade. \n\nI am an autonomous agent connected directly to his professional database. I can:\n• Fetch real-time GitHub commits\n• Cross-reference his skills with a Job Description\n• Guide you through his projects and system architectures\n• Navigate this portfolio for you\n\nHow can I assist you today? Try clicking one of the suggestions below!`
+    `Hello! I'm ST-GPT, the digital representative for Shubham Tade. \n\nI am an autonomous agent connected directly to his professional database. I can:\n• Fetch real-time GitHub commits\n• Cross-reference his skills with a Job Description\n• Guide you through his projects and system architectures\n\nHow can I assist you today? Try clicking one of the suggestions below!`
   ]);
   
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const actionTracker = useRef(new Set<string>());
   
   useEffect(() => {
     let session = sessionStorage.getItem("st_gpt_thread_id");
@@ -134,59 +130,12 @@ export default function AskMeWidget() {
     scrollToBottom();
   }, [messages]); 
 
-  const handleDomActions = (text: string) => {
-    let cleanText = text;
-    
-    if (cleanText.includes("[ACTION:SCROLL_TO_HOME]")) {
-      cleanText = cleanText.replace(/\[ACTION:SCROLL_TO_HOME\]/g, "");
-      if (!actionTracker.current.has("home")) {
-        actionTracker.current.add("home");
-        setIsOpen(false); 
-        router.push("/"); 
-      }
-    }
-
-    if (cleanText.includes("[ACTION:SCROLL_TO_PROJECTS]")) {
-      cleanText = cleanText.replace(/\[ACTION:SCROLL_TO_PROJECTS\]/g, "");
-      if (!actionTracker.current.has("projects")) {
-        actionTracker.current.add("projects");
-        setIsOpen(false); 
-        router.push("/projects"); 
-      }
-    }
-
-    if (cleanText.includes("[ACTION:SCROLL_TO_RESUME]")) {
-      cleanText = cleanText.replace(/\[ACTION:SCROLL_TO_RESUME\]/g, "");
-      if (!actionTracker.current.has("resume")) {
-        actionTracker.current.add("resume");
-        setIsOpen(false); 
-        router.push("/resume"); 
-      }
-    }
-
-    if (cleanText.includes("[ACTION:SCROLL_TO_SKILLS]")) {
-      cleanText = cleanText.replace(/\[ACTION:SCROLL_TO_SKILLS\]/g, "");
-      if (!actionTracker.current.has("skills")) {
-        actionTracker.current.add("skills");
-        setIsOpen(false); 
-        router.push("/skills"); 
-      }
-    }
-
-    if (cleanText.includes("[ACTION:SCROLL_TO_CONTACT]")) {
-      cleanText = cleanText.replace(/\[ACTION:SCROLL_TO_CONTACT\]/g, "");
-      if (!actionTracker.current.has("contact")) {
-        actionTracker.current.add("contact");
-        setIsOpen(false); 
-        router.push("/contact"); 
-      }
-    }
-
-    cleanText = cleanText
+  // Clean tags during active streaming
+  const sanitizeDisplayStream = (text: string) => {
+    return text
+      .replace(/\[ACTION:[^\]]+\]/g, "")
       .replace(/-\s*[\r\n]+\s*\[/g, "- [")
       .replace(/\)\s*[\r\n]+\s*:/g, "): ");
-
-    return cleanText;
   };
 
   const toggleWidget = () => setIsOpen(!isOpen);
@@ -195,7 +144,6 @@ export default function AskMeWidget() {
     if (!message.trim() || isLoading) return;
     
     setIsLoading(true);
-    actionTracker.current.clear();
     
     setMessages((prev) => [...prev, `You: ${message}`, `...`]);
     setInput('');
@@ -238,11 +186,11 @@ export default function AskMeWidget() {
               const parsed = JSON.parse(dataStr);
               if (parsed.text) {
                 aiFullResponse += parsed.text;
-                const displayResponse = handleDomActions(aiFullResponse);
+                const cleanDisplay = sanitizeDisplayStream(aiFullResponse);
                 
                 setMessages((prev) => {
                   const newMessages = [...prev];
-                  newMessages[newMessages.length - 1] = displayResponse;
+                  newMessages[newMessages.length - 1] = cleanDisplay;
                   return newMessages;
                 });
               }
@@ -252,6 +200,7 @@ export default function AskMeWidget() {
           }
         }
       }
+
     } catch (error) {
       setMessages((prev) => {
         const newMessages = [...prev];
