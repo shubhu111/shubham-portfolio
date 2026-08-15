@@ -368,14 +368,17 @@ CRITICAL FORMATTING RULES - YOU MUST OBEY:
 @app.post("/api/chat")
 @limiter.limit("15/minute")
 async def chat_endpoint(request: Request, payload: ChatRequest):
+    # THE SHIELD: Bind the session to the user's IP and hash it
+    user_ip = get_real_ip(request)
+    raw_thread = f"{payload.thread_id}_{user_ip}"
+    secure_thread_id = hashlib.sha256(raw_thread.encode()).hexdigest()
+    
     return StreamingResponse(
-        generate_chat_stream(payload.message, payload.mode, payload.thread_id), 
+        generate_chat_stream(payload.message, payload.mode, secure_thread_id), 
         media_type="text/event-stream"
     )
 
-# ==========================================
 # 5. SANITY CMS INGESTION WEBHOOK
-# ==========================================
 @app.post("/api/webhook/sanity")
 async def sanity_webhook(request: dict, authorization: str = Header(None)):
     # 1. THE SHIELD: Verify the cryptographic secret
