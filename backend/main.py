@@ -218,21 +218,28 @@ async def generate_chat_stream(user_message: str, mode: str, thread_id: str = "d
     # DYNAMIC INTENT ROUTER
     if not is_greeting:
         github_keywords = ["github", "code", "repo", "commit", "source", "deploy", "live"]
-        qdrant_keywords = ["project", "skill", "experience", "work", "portfolio", "tech", "stack", "learn"]
+        qdrant_keywords = [
+            "project", "skill", "experience", "work", "portfolio", "tech", 
+            "stack", "learn", "architecture", "security", "threat", "system", "infrastructure"
+        ]
+        continuation_keywords = ["yes", "sure", "tell me more", "go on", "continue", "okay", "ok", "yeah", "definitely", "please"]
         
+        is_continuation = any(kw in msg_lower for kw in continuation_keywords)
         fetch_github = any(kw in msg_lower for kw in github_keywords)
-        fetch_qdrant = any(kw in msg_lower for kw in qdrant_keywords) or is_jd_match
-        
-        if not fetch_github and not fetch_qdrant:
-            fetch_qdrant = True
-            
+        fetch_qdrant = any(kw in msg_lower for kw in qdrant_keywords) or is_jd_match or is_continuation or (not fetch_github)
+
         if fetch_github:
             github_context = fetch_github_activity()
             print("--- ROUTER: Fetched GitHub Context ---")
             
         if fetch_qdrant:
             try:
-                query_vector = get_embedding(user_message)
+                # If the user gives a short confirmation, enrich the vector query so Qdrant finds the right topic
+                search_query = user_message
+                if is_continuation and len(user_message.split()) <= 4:
+                    search_query = f"{user_message} architecture security projects skills background"
+
+                query_vector = get_embedding(search_query)
 
                 search_response = qdrant.query_points(
                     collection_name="portfolio_context",
