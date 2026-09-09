@@ -201,7 +201,9 @@ export async function POST(req: Request) {
           const points = searchResults.points || [];
           for (const point of points) {
             if (point.payload) {
-              contextStr += `\n- ${point.payload.topic}: ${point.payload.content}`;
+              const topic = point.payload.topic || point.payload.title || 'Portfolio Info';
+              const content = point.payload.content || point.payload.text || point.payload.pageContent || JSON.stringify(point.payload);
+              contextStr += `\n- ${topic}: ${content}`;
             }
           }
           console.log("--- ROUTER: QDRANT RETRIEVED DATA SUCCESSFULLY ---");
