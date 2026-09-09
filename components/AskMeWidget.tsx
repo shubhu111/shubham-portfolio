@@ -34,7 +34,7 @@ const IMAGE_MAP: Record<string, string> = {
 const ThinkingIndicator = () => (
   <div className="flex items-center gap-2 text-[#2CD4EF] font-medium text-sm py-0.5">
     <Sparkles className="w-4 h-4 animate-spin text-[#2CD4EF]" />
-    <span>ST-GPT is thinking</span>
+    <span>ST-Buddy is thinking</span>
     <span className="flex gap-1">
       <span className="animate-bounce" style={{ animationDelay: '0ms' }}>.</span>
       <span className="animate-bounce" style={{ animationDelay: '150ms' }}>.</span>
@@ -107,7 +107,7 @@ export default function AskMeWidget() {
   const [isLoading, setIsLoading] = useState(false);
   
   const [messages, setMessages] = useState<string[]>([
-    `Hello! I'm ST-GPT, the digital representative for Shubham Tade. \n\nI am an autonomous agent connected directly to his professional database. I can:\n• Fetch real-time GitHub commits\n• Cross-reference his skills with a Job Description\n• Guide you through his projects and system architectures\n\nHow can I assist you today? Try clicking one of the suggestions below!`
+    `Hello! I'm ST-Buddy, the digital representative for Shubham Tade. \n\nI am an autonomous agent connected directly to his professional database. I can:\n• Fetch real-time GitHub commits\n• Cross-reference his skills with a Job Description\n• Guide you through his projects and system architectures\n\nHow can I assist you today? Try clicking one of the suggestions below!`
   ]);
   
   const [input, setInput] = useState('');
@@ -204,7 +204,7 @@ export default function AskMeWidget() {
     } catch (error) {
       setMessages((prev) => {
         const newMessages = [...prev];
-        newMessages[newMessages.length - 1] = "Error: Cannot connect to ST-GPT Engine.";
+        newMessages[newMessages.length - 1] = "Error: Cannot connect to ST-Buddy Engine.";
         return newMessages;
       });
     } finally {
@@ -240,31 +240,31 @@ export default function AskMeWidget() {
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
           >
-            <div className="flex items-center justify-between p-6 pb-4 border-b border-slate-800">
-              <div className="flex items-center gap-3">
-                <MessageSquare className="text-[#2CD4EF]" size={22} />
-                <h2 className="text-xl font-bold text-white tracking-tight">ST-GPT</h2>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800 gap-2">
+              <div className="flex items-center gap-2.5 shrink-0">
+                <MessageSquare className="text-[#2CD4EF] shrink-0" size={20} />
+                <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight whitespace-nowrap">ST-Buddy</h2>
               </div>
               
-              <div className="flex bg-slate-900 rounded-lg p-1 border border-slate-700">
+              <div className="flex bg-slate-900 rounded-lg p-1 border border-slate-700 shrink-0">
                 <button 
                   onClick={() => setMode('RECRUITER')}
                   disabled={isLoading}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${mode === 'RECRUITER' ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-slate-200'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md transition-all ${mode === 'RECRUITER' ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-slate-200'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                  <Briefcase size={14} /> Recruiter
+                  <Briefcase size={13} /> Recruiter
                 </button>
                 <button 
                   onClick={() => setMode('TECH_LEAD')}
                   disabled={isLoading}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${mode === 'TECH_LEAD' ? 'bg-[#2CD4EF]/20 text-[#2CD4EF]' : 'text-slate-400 hover:text-slate-200'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md transition-all ${mode === 'TECH_LEAD' ? 'bg-[#2CD4EF]/20 text-[#2CD4EF]' : 'text-slate-400 hover:text-slate-200'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                  <Code2 size={14} /> Tech Lead
+                  <Code2 size={13} /> Tech Lead
                 </button>
               </div>
               
-              <button onClick={toggleWidget} className="text-slate-400 hover:text-white transition ml-2">
-                <X size={22} />
+              <button onClick={toggleWidget} className="text-slate-400 hover:text-white transition shrink-0 p-1">
+                <X size={20} />
               </button>
             </div>
 
