@@ -1,0 +1,376 @@
+{
+  "communities": {
+    "0": [
+      "framer_motion",
+      "google_generative_ai",
+      "lucide_react",
+      "material_icons",
+      "next",
+      "next_sanity",
+      "next_third_parties",
+      "package_dependencies",
+      "package_dependencies_framer_motion",
+      "package_dependencies_google_generative_ai",
+      "package_dependencies_lucide_react",
+      "package_dependencies_material_icons",
+      "package_dependencies_next",
+      "package_dependencies_next_sanity",
+      "package_dependencies_next_third_parties",
+      "package_dependencies_qdrant_js_client_rest",
+      "package_dependencies_react",
+      "package_dependencies_react_dom",
+      "package_dependencies_react_textarea_autosize",
+      "package_dependencies_sanity",
+      "package_dependencies_sanity_image_url",
+      "package_dependencies_sanity_vision",
+      "package_dependencies_styled_components",
+      "package_dependencies_tailwind_merge",
+      "qdrant_js_client_rest",
+      "react",
+      "react_dom",
+      "react_textarea_autosize",
+      "sanity",
+      "sanity_image_url",
+      "sanity_vision",
+      "styled_components",
+      "tailwind_merge"
+    ],
+    "1": [
+      "sanity_config",
+      "sanity_env",
+      "sanity_env_apiversion",
+      "sanity_env_assertvalue",
+      "sanity_env_dataset",
+      "sanity_env_projectid",
+      "sanity_lib_client",
+      "sanity_lib_client_client",
+      "sanity_lib_image",
+      "sanity_lib_image_builder",
+      "sanity_lib_image_urlfor",
+      "sanity_lib_live",
+      "sanity_lib_live_sanityfetch_sanitylive",
+      "sanity_schematypes_agentcontext",
+      "sanity_schematypes_currentlylearning",
+      "sanity_schematypes_index",
+      "sanity_schematypes_index_schema",
+      "sanity_schematypes_project",
+      "sanity_schematypes_techstack",
+      "sanity_structure",
+      "sanity_structure_structure"
+    ],
+    "2": [
+      "ref_dom",
+      "ref_dom_iterable",
+      "ref_esnext",
+      "tsconfig_compileroptions",
+      "tsconfig_compileroptions_allowjs",
+      "tsconfig_compileroptions_esmoduleinterop",
+      "tsconfig_compileroptions_incremental",
+      "tsconfig_compileroptions_isolatedmodules",
+      "tsconfig_compileroptions_jsx",
+      "tsconfig_compileroptions_lib",
+      "tsconfig_compileroptions_module",
+      "tsconfig_compileroptions_moduleresolution",
+      "tsconfig_compileroptions_noemit",
+      "tsconfig_compileroptions_paths",
+      "tsconfig_compileroptions_plugins",
+      "tsconfig_compileroptions_resolvejsonmodule",
+      "tsconfig_compileroptions_skiplibcheck",
+      "tsconfig_compileroptions_strict",
+      "tsconfig_compileroptions_target"
+    ],
+    "3": [
+      "app_layout",
+      "app_layout_metadata",
+      "app_layout_rootlayout",
+      "components_askmewidget",
+      "components_askmewidget_askmewidget",
+      "components_askmewidget_formattedmessage",
+      "components_askmewidget_geminiicon",
+      "components_askmewidget_image_map",
+      "components_askmewidget_markdownlinks",
+      "components_askmewidget_preset_questions",
+      "components_askmewidget_thinkingindicator",
+      "components_interactivebackground",
+      "components_interactivebackground_interactivebackground",
+      "components_interactivebackground_interactivebackground_animate",
+      "components_interactivebackground_interactivebackground_handleparticles",
+      "components_navbar",
+      "components_navbar_navbar",
+      "components_navbar_navitems"
+    ],
+    "4": [
+      "eslint",
+      "eslint_config_next",
+      "package_devdependencies",
+      "package_devdependencies_eslint",
+      "package_devdependencies_eslint_config_next",
+      "package_devdependencies_tailwindcss",
+      "package_devdependencies_tailwindcss_postcss",
+      "package_devdependencies_types_node",
+      "package_devdependencies_types_react",
+      "package_devdependencies_types_react_dom",
+      "package_devdependencies_typescript",
+      "tailwindcss",
+      "tailwindcss_postcss",
+      "types_node",
+      "types_react",
+      "types_react_dom",
+      "typescript"
+    ],
+    "5": [
+      "backend_main",
+      "backend_main_chat_endpoint",
+      "backend_main_chatrequest",
+      "backend_main_fetch_github_activity",
+      "backend_main_generate_chat_stream",
+      "backend_main_get_embedding",
+      "backend_main_get_real_ip",
+      "backend_main_ping_database",
+      "backend_main_root",
+      "backend_main_sanity_webhook",
+      "basemodel",
+      "get",
+      "limit",
+      "post",
+      "request"
+    ],
+    "6": [
+      "app_skills_page",
+      "app_skills_page_revalidate",
+      "app_skills_page_skillspage",
+      "app_skills_skillsclient",
+      "app_skills_skillsclient_containervariants",
+      "app_skills_skillsclient_getcolortheme",
+      "app_skills_skillsclient_geticoncomponent",
+      "app_skills_skillsclient_getlearningstyling",
+      "app_skills_skillsclient_itemvariants",
+      "app_skills_skillsclient_skillsclient"
+    ],
+    "7": [
+      "ref_mts",
+      "ref_next_dev_types_ts",
+      "ref_next_env_d_ts",
+      "ref_next_types_ts",
+      "ref_node_modules",
+      "ref_ts",
+      "ref_tsx",
+      "tsconfig",
+      "tsconfig_exclude",
+      "tsconfig_include"
+    ],
+    "8": [
+      "app_projects_page",
+      "app_projects_page_projectspage",
+      "app_projects_page_revalidate",
+      "app_projects_projectsclient",
+      "app_projects_projectsclient_cardvariants",
+      "app_projects_projectsclient_containervariants",
+      "app_projects_projectsclient_getcolorthemestyling",
+      "app_projects_projectsclient_geticoncomponent",
+      "app_projects_projectsclient_projectsclient"
+    ],
+    "9": [
+      "package",
+      "package_name",
+      "package_private",
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_dev",
+      "package_scripts_lint",
+      "package_scripts_start",
+      "package_version"
+    ],
+    "10": [
+      "app_contact_page",
+      "app_contact_page_contact",
+      "app_contact_page_containervariants",
+      "app_contact_page_githubicon",
+      "app_contact_page_itemvariants",
+      "app_contact_page_linkedinicon"
+    ],
+    "11": [
+      "app_api_sanity_webhook_route",
+      "app_api_sanity_webhook_route_genai",
+      "app_api_sanity_webhook_route_post",
+      "app_api_sanity_webhook_route_qdrant"
+    ],
+    "12": [
+      "app_page",
+      "app_page_cardvariants",
+      "app_page_containervariants",
+      "app_page_home"
+    ],
+    "13": [
+      "app_resume_page",
+      "app_resume_page_containervariants",
+      "app_resume_page_itemvariants",
+      "app_resume_page_resume"
+    ],
+    "14": [
+      "backend_requirements",
+      "concept_pandoai",
+      "concept_st_gpt",
+      "public_resume_image"
+    ],
+    "15": [
+      "agents_md",
+      "claude_md",
+      "readme_md"
+    ],
+    "16": [
+      "app_sitemap",
+      "app_sitemap_sitemap"
+    ],
+    "17": [
+      "components_interactiveglow",
+      "components_interactiveglow_interactiveglow"
+    ],
+    "18": [
+      "eslint_config",
+      "eslint_config_eslintconfig"
+    ],
+    "19": [
+      "next_config",
+      "next_config_nextconfig"
+    ],
+    "20": [
+      "postcss_config",
+      "postcss_config_config"
+    ],
+    "21": [
+      "backend_seed_database"
+    ],
+    "22": [
+      "public_hero_profile"
+    ],
+    "23": [
+      "public_profile"
+    ],
+    "24": [
+      "public_robots"
+    ],
+    "25": [
+      "sanity_cli"
+    ]
+  },
+  "cohesion": {
+    "0": 0.06060606060606061,
+    "1": 0.14761904761904762,
+    "2": 0.10526315789473684,
+    "3": 0.13725490196078433,
+    "4": 0.11764705882352941,
+    "5": 0.21904761904761905,
+    "6": 0.28888888888888886,
+    "7": 0.2,
+    "8": 0.3055555555555556,
+    "9": 0.2222222222222222,
+    "10": 0.3333333333333333,
+    "11": 0.5,
+    "12": 0.5,
+    "13": 0.5,
+    "14": 0.5,
+    "15": 0.6666666666666666,
+    "16": 1.0,
+    "17": 1.0,
+    "18": 1.0,
+    "19": 1.0,
+    "20": 1.0,
+    "21": 1.0,
+    "22": 1.0,
+    "23": 1.0,
+    "24": 1.0,
+    "25": 1.0
+  },
+  "gods": [
+    {
+      "id": "tsconfig_compileroptions",
+      "label": "compilerOptions",
+      "degree": 16
+    },
+    {
+      "id": "backend_main_chat_endpoint",
+      "label": "chat_endpoint()",
+      "degree": 7
+    },
+    {
+      "id": "tsconfig_include",
+      "label": "include",
+      "degree": 7
+    },
+    {
+      "id": "app_skills_skillsclient_skillsclient",
+      "label": "SkillsClient()",
+      "degree": 5
+    },
+    {
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 5
+    },
+    {
+      "id": "app_projects_projectsclient_projectsclient",
+      "label": "ProjectsClient()",
+      "degree": 4
+    },
+    {
+      "id": "backend_main_generate_chat_stream",
+      "label": "generate_chat_stream()",
+      "degree": 4
+    },
+    {
+      "id": "components_interactivebackground_interactivebackground",
+      "label": "InteractiveBackground()",
+      "degree": 4
+    },
+    {
+      "id": "sanity_env_dataset",
+      "label": "dataset",
+      "degree": 4
+    },
+    {
+      "id": "sanity_env_projectid",
+      "label": "projectId",
+      "degree": 4
+    }
+  ],
+  "surprises": [
+    {
+      "source": "Backend Dependencies",
+      "target": "ST-GPT Project",
+      "source_files": [
+        "backend/requirements.txt",
+        "public/resume-image.png"
+      ],
+      "confidence": "INFERRED",
+      "relation": "shares_data_with",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (doc \u2194 image); connects across different repos/directories"
+    },
+    {
+      "source": "Project Overview",
+      "target": "Agent Rules",
+      "source_files": [
+        "README.md",
+        "AGENTS.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "Claude Instructions",
+      "target": "Agent Rules",
+      "source_files": [
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories"
+    }
+  ],
+  "tokens": {
+    "input": 8562,
+    "output": 1304
+  }
+}

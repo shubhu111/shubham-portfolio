@@ -152,7 +152,7 @@ export default function RootLayout({
             muted
             playsInline
             className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-screen grayscale-[0.2]"
-            poster="/neural-poster.jpg"
+        
           >
             <source src="/neural-background.mp4" type="video/mp4" />
           </video>

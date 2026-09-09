@@ -25,7 +25,7 @@ export default function Navbar() {
             ST<span className="text-electricBlue group-hover:text-white transition-colors">.</span>
           </h2>
           <p className="text-[10px] text-latentGray font-mono uppercase tracking-widest hidden md:block">
-            [PORTFOLIO v2.0]
+            [PORTFOLIO v2.1]
           </p>
         </Link>
 

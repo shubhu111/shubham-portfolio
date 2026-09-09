@@ -1,0 +1,16 @@
+.env.local
+.env*
+node_modules/
+.next/
+.sanity/
+dist/
+__pycache__/
+venv/
+.env*
+graphify-out/
+.Documentation/
+dist/static/
+dist/*.js
+dist/*.html
+.Documentation/
+*.pdf

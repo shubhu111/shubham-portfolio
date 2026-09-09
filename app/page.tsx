@@ -51,6 +51,7 @@ export default function Home() {
             src="/hero-profile.jpeg" 
             alt="Shubham Gajanan Tade - AI/ML Engineer" 
             fill
+            sizes="(max-width: 768px) 100vw, 50vw"
             priority
             className="object-cover grayscale contrast-[1.2] opacity-80 transition-all duration-300 object-[12%_45%] md:object-[center_30%]"
           />

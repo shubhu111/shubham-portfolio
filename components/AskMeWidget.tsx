@@ -149,7 +149,7 @@ export default function AskMeWidget() {
     setInput('');
 
     try {
-      const response = await fetch("https://shubham-portfolio-toww.onrender.com/api/chat", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -234,92 +234,87 @@ export default function AskMeWidget() {
       <AnimatePresence>
         {isOpen && (
           <motion.div 
-            className="fixed inset-0 flex items-center justify-center z-[100] p-4 bg-slate-950/70 backdrop-blur-sm"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            onClick={toggleWidget}
+            className="fixed bottom-6 right-6 w-[calc(100vw-3rem)] sm:w-[400px] bg-[#0a0f1a] border border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[600px] max-h-[75vh] z-[100]"
+            initial={{ opacity: 0, scale: 0.9, y: 20 }} 
+            animate={{ opacity: 1, scale: 1, y: 0 }} 
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
           >
-            <motion.div 
-              className="relative w-full max-w-lg bg-[#0a0f1a] border border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
-              initial={{ scale: 0.9, y: 30 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 30 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between p-6 pb-4 border-b border-slate-800">
-                <div className="flex items-center gap-3">
-                  <MessageSquare className="text-[#2CD4EF]" size={22} />
-                  <h2 className="text-xl font-bold text-white tracking-tight">ST-GPT</h2>
-                </div>
-                
-                <div className="flex bg-slate-900 rounded-lg p-1 border border-slate-700">
-                  <button 
-                    onClick={() => setMode('RECRUITER')}
-                    disabled={isLoading}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${mode === 'RECRUITER' ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-slate-200'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  >
-                    <Briefcase size={14} /> Recruiter
-                  </button>
-                  <button 
-                    onClick={() => setMode('TECH_LEAD')}
-                    disabled={isLoading}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${mode === 'TECH_LEAD' ? 'bg-[#2CD4EF]/20 text-[#2CD4EF]' : 'text-slate-400 hover:text-slate-200'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  >
-                    <Code2 size={14} /> Tech Lead
-                  </button>
-                </div>
-                
-                <button onClick={toggleWidget} className="text-slate-400 hover:text-white transition ml-2">
-                  <X size={22} />
+            <div className="flex items-center justify-between p-6 pb-4 border-b border-slate-800">
+              <div className="flex items-center gap-3">
+                <MessageSquare className="text-[#2CD4EF]" size={22} />
+                <h2 className="text-xl font-bold text-white tracking-tight">ST-GPT</h2>
+              </div>
+              
+              <div className="flex bg-slate-900 rounded-lg p-1 border border-slate-700">
+                <button 
+                  onClick={() => setMode('RECRUITER')}
+                  disabled={isLoading}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${mode === 'RECRUITER' ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-slate-200'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  <Briefcase size={14} /> Recruiter
+                </button>
+                <button 
+                  onClick={() => setMode('TECH_LEAD')}
+                  disabled={isLoading}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${mode === 'TECH_LEAD' ? 'bg-[#2CD4EF]/20 text-[#2CD4EF]' : 'text-slate-400 hover:text-slate-200'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  <Code2 size={14} /> Tech Lead
                 </button>
               </div>
+              
+              <button onClick={toggleWidget} className="text-slate-400 hover:text-white transition ml-2">
+                <X size={22} />
+              </button>
+            </div>
 
-              <div className="flex-1 overflow-y-auto p-6 space-y-4">
-                {messages.map((msg, i) => (
-                  <div key={i} className={`p-4 rounded-xl text-sm md:text-base max-w-[90%] ${
-                    msg.startsWith('You:') ? "bg-[#2CD4EF]/20 border border-[#2CD4EF]/30 text-white ml-auto" : "bg-slate-800 border border-slate-700 text-slate-100"
-                  }`}>
-                    <FormattedMessage content={msg} />
-                  </div>
-                ))}
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              {messages.map((msg, i) => (
+                <div key={i} className={`p-4 rounded-xl text-sm md:text-base max-w-[90%] ${
+                  msg.startsWith('You:') ? "bg-[#2CD4EF]/20 border border-[#2CD4EF]/30 text-white ml-auto" : "bg-slate-800 border border-slate-700 text-slate-100"
+                }`}>
+                  <FormattedMessage content={msg} />
+                </div>
+              ))}
 
-                {messages.length === 1 && (
-                  <div className="flex flex-col gap-2 mt-4">
-                    {PRESET_QUESTIONS.map((question) => (
-                      <button 
-                        key={question} 
-                        onClick={() => handleSendMessage(question)}
-                        disabled={isLoading}
-                        className={`flex items-center gap-3 text-left px-4 py-2.5 bg-slate-800/60 hover:bg-slate-700 border border-slate-700/80 rounded-xl transition-all duration-300 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                      >
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#2CD4EF]"></div>
-                        <span className="text-slate-300 text-sm">{question}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-                <div ref={messagesEndRef} />
-              </div>
+              {messages.length === 1 && (
+                <div className="flex flex-col gap-2 mt-4">
+                  {PRESET_QUESTIONS.map((question) => (
+                    <button 
+                      key={question} 
+                      onClick={() => handleSendMessage(question)}
+                      disabled={isLoading}
+                      className={`flex items-center gap-3 text-left px-4 py-2.5 bg-slate-800/60 hover:bg-slate-700 border border-slate-700/80 rounded-xl transition-all duration-300 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#2CD4EF]"></div>
+                      <span className="text-slate-300 text-sm">{question}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
 
-              <div className="p-4 bg-[#0a0f1a] border-t border-slate-800">
-                <form 
-                  onSubmit={(e) => { e.preventDefault(); handleSendMessage(input); }} 
-                  className={`flex items-end gap-3 bg-slate-900/80 rounded-3xl border transition-all duration-300 px-4 py-3 ${isLoading ? 'border-slate-800 opacity-70' : 'border-slate-700 focus-within:border-[#2CD4EF] focus-within:ring-4 focus-within:ring-[#2CD4EF]/20 focus-within:shadow-[0_0_20px_rgba(44,212,239,0.2)]'}`}
-                >
-                  <TextareaAutosize 
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    disabled={isLoading}
-                    placeholder={mode === 'RECRUITER' ? "Ask about business impact & experience..." : "Ask about architectures & vectors..."} 
-                    minRows={1}
-                    maxRows={6}
-                    className="flex-grow bg-transparent text-[#ffffff] text-sm md:text-base placeholder:text-slate-500 outline-none resize-none overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-                  />
-                  <button type="submit" disabled={isLoading || !input.trim()} className={`transition mb-0.5 ${isLoading || !input.trim() ? 'text-slate-600 cursor-not-allowed' : 'text-slate-400 hover:text-[#2CD4EF]'}`}>
-                    <Send size={18} />
-                  </button>
-                </form>
-              </div>
-            </motion.div>
+            <div className="p-4 bg-[#0a0f1a] border-t border-slate-800">
+              <form 
+                onSubmit={(e) => { e.preventDefault(); handleSendMessage(input); }} 
+                className={`flex items-end gap-3 bg-slate-900/80 rounded-3xl border transition-all duration-300 px-4 py-3 ${isLoading ? 'border-slate-800 opacity-70' : 'border-slate-700 focus-within:border-[#2CD4EF] focus-within:ring-4 focus-within:ring-[#2CD4EF]/20 focus-within:shadow-[0_0_20px_rgba(44,212,239,0.2)]'}`}
+              >
+                <TextareaAutosize 
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  disabled={isLoading}
+                  placeholder={mode === 'RECRUITER' ? "Ask about business impact & experience..." : "Ask about architectures & vectors..."} 
+                  minRows={1}
+                  maxRows={6}
+                  className="flex-grow bg-transparent text-[#ffffff] text-sm md:text-base placeholder:text-slate-500 outline-none resize-none overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                />
+                <button type="submit" disabled={isLoading || !input.trim()} className={`transition mb-0.5 ${isLoading || !input.trim() ? 'text-slate-600 cursor-not-allowed' : 'text-slate-400 hover:text-[#2CD4EF]'}`}>
+                  <Send size={18} />
+                </button>
+              </form>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
