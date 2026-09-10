@@ -177,7 +177,7 @@ export async function POST(req: Request) {
 
       let contextStr = " ";
 
-     if (fetchQdrant) {
+      if (fetchQdrant) {
         try {
           let searchQuery = userMessage;
           if (isContinuation && userMessage.split(/\s+/).length <= 4) {
@@ -197,10 +197,10 @@ export async function POST(req: Request) {
             ),
           ]);
 
-          // The .query() method returns an object containing a 'points' array
-          const points = searchResults.points || [];
+          // Unpack correctly whether the SDK returns a direct array or a wrapped object
+          const points = Array.isArray(searchResults) ? searchResults : (searchResults?.points || []);
           for (const point of points) {
-            if (point.payload) {
+            if (point?.payload) {
               const topic = point.payload.topic || point.payload.title || 'Portfolio Info';
               const content = point.payload.content || point.payload.text || point.payload.pageContent || JSON.stringify(point.payload);
               contextStr += `\n- ${topic}: ${content}`;
@@ -208,9 +208,9 @@ export async function POST(req: Request) {
           }
           console.log("--- ROUTER: QDRANT RETRIEVED DATA SUCCESSFULLY ---");
         } catch (e) {
-       contextStr = ""; // Forces your existing prompt fallback to trigger
-       console.error("--- QDRANT SEARCH FAILED:", e);
-     }
+          contextStr = ""; // Forces your existing prompt fallback to trigger
+          console.error("--- QDRANT SEARCH FAILED:", e);
+        }
       }
     } else {
       console.log("--- ROUTER: Simple greeting detected. Bypassed Data Fetch. ---");
