@@ -2459,7 +2459,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "app/api/chat/route.ts",
-      "source_location": "L174",
+      "source_location": "L175",
       "weight": 1.0
     },
     {
@@ -2471,7 +2471,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "app/api/chat/route.ts",
-      "source_location": "L187",
+      "source_location": "L186",
       "weight": 1.0
     },
     {
@@ -2483,7 +2483,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "app/api/chat/route.ts",
-      "source_location": "L290",
+      "source_location": "L289",
       "weight": 1.0
     },
     {
@@ -5085,5 +5085,5 @@
       "source_file": "backend/requirements.txt"
     }
   ],
-  "built_at_commit": "323dd9502a0ab010800d05d65b79d279cebde6bb"
+  "built_at_commit": "a6b702dc852f1e9e173bfb3dfbee08f907a57e84"
 }

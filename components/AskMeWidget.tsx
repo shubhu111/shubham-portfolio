@@ -154,7 +154,8 @@ export default function AskMeWidget() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           message: message, 
-          mode: mode, 
+          mode: mode,
+          history: messages.slice(-6), // FIX: Sending history to the backend
           thread_id: threadId || "default_session" 
         }),
       });
