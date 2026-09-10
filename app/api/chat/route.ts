@@ -154,7 +154,8 @@ export async function POST(req: Request) {
     const pureGreetings = ["hi", "hello", "hey", "hi buddie", "hello buddie", "hey there", "hi there", "sup", "hi bro"];
     const isGreeting = pureGreetings.includes(msgLower);
 
-    let contextStr = "";
+    // EXACT SCOPE FIX: Initialized properly here, never redeclared later
+    let contextStr = " ";
     let githubContext = "";
 
     // DYNAMIC INTENT ROUTER
@@ -174,8 +175,6 @@ export async function POST(req: Request) {
         githubContext = await fetchGithubActivity();
         console.log("--- ROUTER: Fetched GitHub Context ---");
       }
-
-      let contextStr = " ";
 
       if (fetchQdrant) {
         try {
