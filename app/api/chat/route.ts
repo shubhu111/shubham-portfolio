@@ -133,7 +133,7 @@ export async function POST(req: Request) {
     let body;
     try {
       body = await req.json();
-    } catch (e) {
+    } catch {
       return NextResponse.json({ error: "Invalid JSON payload" }, { status: 400 });
     }
 
@@ -153,6 +153,9 @@ export async function POST(req: Request) {
     const isJdMatch = userMessage.length > 150 && ["job", "jd", "requirements", "description", "responsibilities"].some((kw) => msgLower.includes(kw));
     const isGreeting = ["hi", "hello", "hey", "sup", "hi bro"].includes(msgLower);
 
+    // ==========================================
+    // HISTORY PARSING & VALIDATION
+    // ==========================================
     const formattedHistory: { role: string; parts: { text: string }[] }[] = [];
     let lastRole = "";
 
@@ -173,12 +176,18 @@ export async function POST(req: Request) {
       }
     }
 
-    if (formattedHistory.length > 0 && formattedHistory[formattedHistory.length - 1].role === "user") {
+    // Gemini requirement: History must start with 'user'
+    while (formattedHistory.length > 0 && formattedHistory[0].role === "model") {
+      formattedHistory.shift();
+    }
+
+    // Gemini requirement: History must alternate and end with 'model' before calling sendMessageStream
+    while (formattedHistory.length > 0 && formattedHistory[formattedHistory.length - 1].role === "user") {
       formattedHistory.pop();
     }
 
     // ==========================================
-    // INTENT ROUTER & VECTOR SEARCH
+    // INTENT ROUTER & VECTOR RETRIEVAL
     // ==========================================
     let contextStr = "";
     let githubContext = "";
@@ -224,14 +233,11 @@ export async function POST(req: Request) {
       ? "TECH LEAD MODE: Dive directly into system architectures, vector dimensions, data pipelines, and database latency."
       : "RECRUITER MODE: Focus on business impact, product outcomes, and high-level summaries. Avoid overly dense jargon.";
 
-    // ==========================================
-    // BUG FIX: PROMPT LEAK ISOLATION
-    // ==========================================
     let dbStatusContext = "";
     if (contextStr.trim()) {
       dbStatusContext = `<retrieved_context>\n${contextStr}\n</retrieved_context>`;
     } else {
-      dbStatusContext = `<system_alert>\nDATABASE OFFLINE: You currently have ZERO access to Shubham's project data. You MUST NOT invent or list projects. You MUST politely apologize for the technical glitch and invite the user to browse the Projects or Resume tabs manually.\n</system_alert>`;
+      dbStatusContext = `<system_alert>\nDATABASE OFFLINE: You currently have ZERO access to Shubham's project data. You MUST NOT invent or list projects. Politely apologize for the technical glitch and invite the user to browse the Projects or Resume tabs manually.\n</system_alert>`;
     }
 
     let systemInstruction = "";
@@ -245,11 +251,11 @@ ${dbStatusContext}
 1. Match Rating: Provide an objective percentage alignment.
 2. Key Strengths: Direct mapping between JD requirements and Shubham's actual skills/projects.
 3. Gap Analysis: If a requirement is missing from his context, pivot to his core AI/Data strengths positively.
-4. MANDATORY FOLLOW-UP: End your response with a natural question asking how they want to proceed.
+4. MANDATORY FOLLOW-UP: End your response with a natural question asking how they would like to proceed.
 </execution_rules>`;
     } else {
       systemInstruction = `<system_directive>
-You are ST-Buddy, a highly advanced AI assistant acting as the interactive portfolio guide for Shubham Gajanan Tade.
+You are ST-Buddy, an interactive portfolio guide for Shubham Gajanan Tade.
 </system_directive>
 <core_identity>
 - Subject: Shubham Gajanan Tade (AI/ML Engineer & Data Analyst based in Pune, India).
@@ -259,16 +265,20 @@ You are ST-Buddy, a highly advanced AI assistant acting as the interactive portf
 ${dbStatusContext}
 ${githubContext ? `<github_live_data>\n${githubContext}\n</github_live_data>` : ""}
 <formatting_directive>
-1. NATURAL ACKNOWLEDGMENT: React naturally to the user's input before giving details.
-2. BULLET POINT SYMBOLS: Use clean dashes (-). NO asterisks.
+1. NATURAL ACKNOWLEDGMENT: React naturally in 1 sentence to the user's input before delivering detailed information.
+2. BULLET POINT SYMBOLS: Use clean dashes (-) for lists. DO NOT use asterisks.
 3. STRICT SINGLE-LINE BULLETS: Every bullet point MUST stay on a SINGLE continuous line.
-4. STRICT LINKING: ONLY create markdown links [Text](URL) if a specific URL is provided in the context.
+4. STRICT LINKING: ONLY create markdown links [Text](URL) if a specific URL is provided in the retrieved context.
 </formatting_directive>
 <operational_rules>
 1. FACTUAL GROUNDING: Base technical answers strictly on the retrieved context or live github data.
-2. INVISIBLE INTEGRATION: Do not use phrases like "Based on the provided context."
+2. INVISIBLE INTEGRATION: Do not use meta-announcements like "Based on the provided context."
 3. TONE & ADAPTABILITY: ${roleInstruction}
-4. CONVERSATIONAL FLOW: NEVER ask "either/or" follow-up questions. DO NOT end every message with a question.
+4. CONVERSATIONAL FLOW & PROACTIVE SUGGESTIONS:
+   - When presenting lists of projects, skills, or technical explanations, conclude with a natural, proactive follow-up suggestion inviting the user to explore a specific project or technical detail deeper (e.g., asking about architecture, data pipelines, or performance metrics).
+   - NEVER ask robotic "either/or" questions (e.g., "Would you like to explore X or Y?"). Instead, offer a specific suggestion or open invitation.
+   - DO NOT repeat robotic clichés like "What would you like to explore next?". Vary your phrasing naturally.
+   - For brief casual remarks, greetings, or acknowledgments (e.g., "nice", "thanks", "cool"), respond warmly and concisely without forcing an unnecessary question.
 </operational_rules>`;
     }
 
@@ -299,7 +309,12 @@ ${githubContext ? `<github_live_data>\n${githubContext}\n</github_live_data>` : 
       async start(controller) {
         try {
           for await (const chunk of streamResult.stream) {
-            const textContent = chunk.text();
+            let textContent = "";
+            try {
+              textContent = chunk.text();
+            } catch {
+              // Gracefully handle trailing metadata chunks without text payloads
+            }
             if (textContent) {
               controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: textContent })}\n\n`));
             }
