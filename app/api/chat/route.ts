@@ -164,6 +164,7 @@ const GraphAnnotation = Annotation.Root({
 });
 
 // NODE 1: Retrieve Context & Dynamic Intent Router
+// NODE 1: Retrieve Context & Dynamic Intent Router
 async function retrieveContextNode(state: typeof GraphAnnotation.State) {
   const lastMessage = state.messages.length > 0 
     ? state.messages[state.messages.length - 1].content.toString() 
@@ -176,14 +177,17 @@ async function retrieveContextNode(state: typeof GraphAnnotation.State) {
   const pureGreetings = ["hi", "hello", "hey", "hi buddie", "hello buddie", "hey there", "hi there", "sup", "hi bro"];
   const isGreeting = pureGreetings.includes(msgLower);
 
-  // Dynamic Intent Router: Bypass Qdrant for pure conversation continuations to protect state memory
   const continuationKeywords = ["yes", "sure", "tell me more", "go on", "continue", "okay", "ok", "yeah", "definitely", "please", "yep", "do it"];
   const isContinuation = continuationKeywords.some((kw) => msgLower === kw || (msgLower.length < 25 && msgLower.includes(kw)));
 
-  let contextStr = state.contextStr;
+  let contextStr = state.contextStr; // Keep the existing context by default
   let githubContext = state.githubContext;
 
-  if (!isGreeting && !isContinuation) {
+  if (isGreeting) {
+    console.log("--- ROUTER: Simple greeting detected. Bypassing Retrieval and clearing stale context. ---");
+    contextStr = " "; // Reset text context ONLY for brand new casual greetings
+  } else if (!isContinuation) {
+    // A completely new informational question was asked -> Fetch fresh data from Qdrant
     const githubKeywords = ["github", "code", "repo", "commit", "source", "deploy", "live"];
     const fetchGithub = githubKeywords.some((kw) => msgLower.includes(kw));
 
@@ -193,7 +197,7 @@ async function retrieveContextNode(state: typeof GraphAnnotation.State) {
     }
 
     try {
-      const queryVector = await getEmbedding(lastMessage); // Pure string, no hardcoded keywords
+      const queryVector = await getEmbedding(lastMessage);
 
       const searchResults = await Promise.race([
         qdrant.query("portfolio_context", {
@@ -207,7 +211,7 @@ async function retrieveContextNode(state: typeof GraphAnnotation.State) {
       ]);
 
       const points = Array.isArray(searchResults) ? searchResults : (searchResults?.points || []);
-      contextStr = " "; // Flush old chunks for a clean turn
+      contextStr = " "; // Flush old chunks safely since we are loading fresh ones
       for (const point of points) {
         if (point?.payload) {
           const topic = point.payload.topic || point.payload.title || 'Portfolio Info';
@@ -221,12 +225,14 @@ async function retrieveContextNode(state: typeof GraphAnnotation.State) {
       console.error("--- QDRANT SEARCH FAILED:", e);
     }
   } else {
-    console.log(`--- ROUTER: ${isContinuation ? 'Continuation' : 'Greeting'} detected. Bypassing Retrieval. Relying on state memory. ---`);
-    contextStr = " "; // Prevent database context corruption
+    // BUG FIX: It's a continuation turn (like "yes"). We bypass Qdrant lookup, 
+    // but we DO NOT wipe out contextStr. We keep the previous turn's contextStr intact.
+    console.log("--- ROUTER: Continuation detected. Bypassing Qdrant retrieval. Preserving loaded context parameters. ---");
   }
 
   return { contextStr, githubContext, isJdMatch };
 }
+
 
 // NODE 2: Generate AI Response
 async function generateResponseNode(state: typeof GraphAnnotation.State) {
