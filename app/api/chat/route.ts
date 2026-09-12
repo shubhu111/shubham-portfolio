@@ -27,6 +27,7 @@ const getValidGeminiKeys = (): string[] => {
     process.env.GEMINI_API_KEY_3,
     process.env.GEMINI_API_KEY_4,
     process.env.GEMINI_API_KEY_5,
+    process.env.GEMINI_API_KEY,
   ].filter((k): k is string => Boolean(k && k.trim().length > 0));
 
   if (keys.length === 0) {
@@ -161,9 +162,12 @@ const GraphAnnotation = Annotation.Root({
     reducer: (x: boolean, y: boolean | undefined) => y ?? x,
     default: () => false,
   }),
+  dbFailed: Annotation<boolean>({
+    reducer: (x: boolean, y: boolean | undefined) => y ?? x,
+    default: () => false,
+  }),
 });
 
-// NODE 1: Retrieve Context & Dynamic Intent Router
 // NODE 1: Retrieve Context & Dynamic Intent Router
 async function retrieveContextNode(state: typeof GraphAnnotation.State) {
   const lastMessage = state.messages.length > 0 
@@ -182,6 +186,7 @@ async function retrieveContextNode(state: typeof GraphAnnotation.State) {
 
   let contextStr = state.contextStr; // Keep the existing context by default
   let githubContext = state.githubContext;
+  let dbFailed = false;
 
   if (isGreeting) {
     console.log("--- ROUTER: Simple greeting detected. Bypassing Retrieval and clearing stale context. ---");
@@ -222,6 +227,7 @@ async function retrieveContextNode(state: typeof GraphAnnotation.State) {
       console.log("--- ROUTER: QDRANT RETRIEVED DATA SUCCESSFULLY ---");
     } catch (e) {
       contextStr = "";
+      dbFailed = true;
       console.error("--- QDRANT SEARCH FAILED:", e);
     }
   } else {
@@ -230,7 +236,7 @@ async function retrieveContextNode(state: typeof GraphAnnotation.State) {
     console.log("--- ROUTER: Continuation detected. Bypassing Qdrant retrieval. Preserving loaded context parameters. ---");
   }
 
-  return { contextStr, githubContext, isJdMatch };
+  return { contextStr, githubContext, isJdMatch, dbFailed };
 }
 
 
@@ -285,7 +291,7 @@ ${chatHistoryContext}
 </recent_chat_history>
 
 <retrieved_context>
-${state.contextStr && state.contextStr.trim() !== "" ? state.contextStr : "CRITICAL ERROR: The database is currently unreachable. You have ZERO context about Shubham's projects. You MUST NOT invent, guess, or list any projects or links. Politely apologize, state that your database connection is temporarily down, and invite the user to browse the Projects section via the top navigation bar."}
+${state.dbFailed ? "CRITICAL ERROR: The database is currently unreachable. You have ZERO context about Shubham's projects. You MUST NOT invent, guess, or list any projects or links. Politely apologize, state that your database connection is temporarily down, and invite the user to browse the Projects section via the top navigation bar." : state.contextStr}
 ${state.githubContext}
 </retrieved_context>
 
@@ -303,7 +309,7 @@ CRITICAL FORMATTING RULES - YOU MUST OBEY:
 
 <operational_rules>
 1. STRICT FACTUAL GROUNDING (CRITICAL): You are strictly forbidden from inventing, guessing, or generating any projects, skills, or links that are not explicitly provided in the <retrieved_context>. 
-2. ZERO-CONTEXT PROTOCOL: If the <retrieved_context> is empty or indicates a database failure, you must state exactly: "I'm currently unable to access the portfolio database to retrieve those details. Please check the Projects or Resume tabs above."
+2. ZERO-CONTEXT PROTOCOL: If the <retrieved_context> indicates a database failure (state.dbFailed is true), you must state exactly: "I'm currently unable to access the portfolio database to retrieve those details. Please check the Projects or Resume tabs above."
 3. FACTUAL GROUNDING: Base technical answers strictly on the <retrieved_context> or previous conversational history.
 4. INVISIBLE INTEGRATION: Do not use phrases like "Based on the provided context."
 5. TONE & ADAPTABILITY: ${roleInstruction}. Be natural and professional.
@@ -357,6 +363,27 @@ const app = workflow.compile({ checkpointer: checkpointer as any });
 // ==========================================
 export async function POST(req: Request) {
   try {
+    // --- SECURITY PATCH RESTORED: ENFORCED IP SHIELD RATE LIMITER ---
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "unknown_ip";
+    
+    if (!globalThis.rateLimiterMap) {
+      globalThis.rateLimiterMap = new Map<string, { count: number; expiresAt: number }>();
+    }
+    const now = Date.now();
+    const clientWindow = globalThis.rateLimiterMap.get(ip);
+
+    if (!clientWindow || now > clientWindow.expiresAt) {
+      globalThis.rateLimiterMap.set(ip, { count: 1, expiresAt: now + 60000 });
+    } else {
+      clientWindow.count++;
+      if (clientWindow.count > 15) {
+        return NextResponse.json(
+          { error: "Too many requests. Please try again in a minute." }, 
+          { status: 429 }
+        );
+      }
+    }
+
     // --- PAYLOAD EXTRACTION ---
     const body = await req.json();
     const userMessage: string = body.message || "";
@@ -366,8 +393,6 @@ export async function POST(req: Request) {
     if (!userMessage.trim()) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 });
     }
-
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "unknown_ip";
 
     // --- SECURITY: THREAD ID SPOOF PROTECTION ---
     const secureThreadId = crypto
@@ -424,4 +449,9 @@ export async function POST(req: Request) {
     console.error("API Route Error:", error);
     return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
   }
+}
+
+// Global declaration tracking for the serverless shield layer
+declare global {
+  var rateLimiterMap: Map<string, { count: number; expiresAt: number }> | undefined;
 }
