@@ -228,4 +228,4 @@ graphify-out/cache/
 graphify-out/**/manifest.json
 
 
-old_main.py
+old-main.py

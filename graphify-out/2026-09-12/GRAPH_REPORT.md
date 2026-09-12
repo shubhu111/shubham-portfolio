@@ -1,16 +1,16 @@
-# Graph Report - shubham-portfolio  (2026-09-12)
+# Graph Report - shubham-portfolio  (2026-09-10)
 
 ## Corpus Check
-- 37 files · ~72,468 words
+- 37 files · ~72,059 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 233 nodes · 250 edges · 27 communities (13 shown, 10 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 5 edges (avg confidence: 0.85)
+- 215 nodes · 230 edges · 27 communities (13 shown, 10 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c2e064e9`
+- Built from commit: `c95826f8`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -20,7 +20,7 @@
 - TypeScript Compiler Options
 - UI Components and Layout
 - Development and Styling Tools
-- main.py
+- Backend API Logic
 - Skills Page Components
 - include
 - projects/page.tsx
@@ -44,12 +44,12 @@
 2. `chat_endpoint()` - 7 edges
 3. `include` - 7 edges
 4. `SkillsClient()` - 5 edges
-5. `generate_chat_stream()` - 5 edges
-6. `scripts` - 5 edges
+5. `scripts` - 5 edges
+6. `POST()` - 4 edges
 7. `ProjectsClient()` - 4 edges
-8. `InteractiveBackground()` - 4 edges
-9. `dataset` - 4 edges
-10. `projectId` - 4 edges
+8. `generate_chat_stream()` - 4 edges
+9. `InteractiveBackground()` - 4 edges
+10. `dataset` - 4 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Backend Dependencies` --shares_data_with--> `ST-GPT Project`  [INFERRED]
@@ -69,8 +69,8 @@
 ## Communities (27 total, 10 thin omitted)
 
 ### Community 0 - "dependencies"
-Cohesion: 0.04
-Nodes (47): ai, @ai-sdk/google, @ai-sdk/react, framer-motion, @google/generative-ai, ioredis, @langchain/core, @langchain/langgraph (+39 more)
+Cohesion: 0.05
+Nodes (39): ai, @ai-sdk/google, @ai-sdk/react, framer-motion, @google/generative-ai, lucide-react, material-icons, next (+31 more)
 
 ### Community 1 - "Sanity CMS Configuration"
 Cohesion: 0.15
@@ -88,9 +88,9 @@ Nodes (9): metadata, AskMeWidget(), IMAGE_MAP, PRESET_QUESTIONS, InteractiveBack
 Cohesion: 0.12
 Nodes (17): eslint, eslint-config-next, devDependencies, eslint, eslint-config-next, tailwindcss, @tailwindcss/postcss, @types/node (+9 more)
 
-### Community 5 - "main.py"
-Cohesion: 0.16
-Nodes (18): chat_endpoint(), ChatRequest, extract_message_text(), fetch_github_activity(), generate_chat_stream(), get_embedding(), get_real_ip(), ping_database() (+10 more)
+### Community 5 - "Backend API Logic"
+Cohesion: 0.22
+Nodes (14): chat_endpoint(), ChatRequest, fetch_github_activity(), generate_chat_stream(), get_embedding(), get_real_ip(), ping_database(), root() (+6 more)
 
 ### Community 6 - "Skills Page Components"
 Cohesion: 0.29
@@ -117,27 +117,27 @@ Cohesion: 0.67
 Nodes (3): Agent Rules, Claude Instructions, Project Overview
 
 ### Community 26 - "chat/route.ts"
-Cohesion: 0.19
-Nodes (12): app, checkpointer, fetchGithubActivity(), generateResponseNode(), getEmbedding(), getValidGeminiKeys(), githubCache, GraphAnnotation (+4 more)
+Cohesion: 0.39
+Nodes (7): fetchGithubActivity(), getEmbedding(), getValidGeminiKeys(), githubCache, maxDuration, POST(), qdrant
 
 ## Knowledge Gaps
-- **99 isolated node(s):** `maxDuration`, `qdrant`, `checkpointer`, `githubCache`, `GraphAnnotation` (+94 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 131 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **91 isolated node(s):** `maxDuration`, `qdrant`, `githubCache`, `qdrant`, `genAI` (+86 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 121 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `dependencies` connect `dependencies` to `package.json`, `main.py`?**
-  _High betweenness centrality (0.133) - this node is a cross-community bridge._
-- **Why does `@langchain/google-genai` connect `main.py` to `dependencies`?**
-  _High betweenness centrality (0.049) - this node is a cross-community bridge._
+- **Why does `dependencies` connect `dependencies` to `package.json`?**
+  _High betweenness centrality (0.073) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `Development and Styling Tools` to `package.json`?**
-  _High betweenness centrality (0.049) - this node is a cross-community bridge._
-- **What connects `maxDuration`, `qdrant`, `checkpointer` to the rest of the system?**
-  _99 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _High betweenness centrality (0.039) - this node is a cross-community bridge._
+- **Why does `compilerOptions` connect `TypeScript Compiler Options` to `include`?**
+  _High betweenness centrality (0.014) - this node is a cross-community bridge._
+- **What connects `maxDuration`, `qdrant`, `githubCache` to the rest of the system?**
+  _91 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `dependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.0425531914893617 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05128205128205128 - nodes in this community are weakly interconnected._
 - **Should `Sanity CMS Configuration` be split into smaller, more focused modules?**
   _Cohesion score 0.14761904761904762 - nodes in this community are weakly interconnected._
 - **Should `TypeScript Compiler Options` be split into smaller, more focused modules?**
